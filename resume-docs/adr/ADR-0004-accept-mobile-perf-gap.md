@@ -6,6 +6,12 @@
 | Date     | 2026-05-29 |
 | Deciders | Owner      |
 
+> **Editorial clarification (same day):** roadmap items originally labeled
+> `C1` (PPR) and `C2` (Astro) were renumbered to `B2` and `B3` respectively
+> when Phases B / C / D were collapsed into a single Phase B parking lot.
+> All references in this ADR have been updated. The decision itself is
+> unchanged.
+
 ## Context
 
 [`01_PRD.md` §5](../01_PRD.md) (v0.2.0) defined a success metric of
@@ -54,8 +60,8 @@ targets and to reference this document.
 
 | Option                                                | Pros                                                                | Cons                                                                                                                                                          | Why not chosen                                                                                                                                  |
 | ----------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Adopt experimental Next.js 15 Partial Prerendering    | Could plausibly raise mobile Performance into the 90s               | Currently experimental (no stability guarantee). Streams from a Node runtime — incompatible with `output: "export"`, supersedes ADR-0001's hosting assumption | Too much risk and architectural disruption for a single-owner content site. Tracked as roadmap **C1**; the trigger condition no longer applies. |
-| Swap framework to Astro                               | Likely scores ≥ 95 on every category for a content-only resume site | Full rewrite. Supersedes ADR-0001 wholesale. Materially changes the developer experience.                                                                     | Disproportionate cost for the visitor-impact gain. Tracked as roadmap **C2** as the "nuclear option".                                           |
+| Adopt experimental Next.js 15 Partial Prerendering    | Could plausibly raise mobile Performance into the 90s               | Currently experimental (no stability guarantee). Streams from a Node runtime — incompatible with `output: "export"`, supersedes ADR-0001's hosting assumption | Too much risk and architectural disruption for a single-owner content site. Tracked as roadmap **B2**; the trigger condition no longer applies. |
+| Swap framework to Astro                               | Likely scores ≥ 95 on every category for a content-only resume site | Full rewrite. Supersedes ADR-0001 wholesale. Materially changes the developer experience.                                                                     | Disproportionate cost for the visitor-impact gain. Tracked as roadmap **B3** as the "nuclear option".                                           |
 | Leave the PRD target as stated, ship with stated miss | No documentation work                                               | Accumulates undeclared technical debt; first reviewer will ask why a stated target is unmet                                                                   | Worst-of-both: same shipping state as accepted, without the rationale.                                                                          |
 | Accept the gap, document it formally **(this ADR)**   | Zero engineering cost; honest about the trade-off; reversible later | Public-facing Lighthouse run shows a sub-95 mobile Performance score                                                                                          | Chosen.                                                                                                                                         |
 
@@ -74,7 +80,7 @@ targets and to reference this document.
     (TBT 600 ms) explains why; the rest of the categories stay at 96–100.
   - If a mobile-heavy audience emerges (e.g., the site starts getting
     significant traffic from low-end Android devices), this ADR should be
-    revisited; the obvious next step is roadmap **C1**.
+    revisited; the obvious next step is roadmap **B2**.
 - **Reversibility**: high. Reopening this decision means superseding this
   ADR with a new one that picks (a) PPR or (b) framework swap.
 
@@ -83,7 +89,7 @@ targets and to reference this document.
 - [x] Update [`01_PRD.md` §5](../01_PRD.md) to reflect the table above and
       to reference this ADR.
 - [x] Mark [`tooling-notes.md` §7](../tooling-notes.md) as resolved.
-- [x] Move roadmap **A3** to Completed; mark roadmap **C1** as not pursued
+- [x] Move roadmap **A3** to Completed; mark roadmap **B2** as not pursued
       for v1.
 - [ ] Re-run Lighthouse against the real owner content once roadmap **A1**
       ships, and confirm the relaxed targets still hold. Update PRD or
