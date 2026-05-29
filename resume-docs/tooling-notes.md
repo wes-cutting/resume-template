@@ -1,9 +1,9 @@
 # Tooling notes
 
-| Field        | Value                              |
-| ------------ | ---------------------------------- |
-| Status       | Active                             |
-| Last updated | 2026-05-29 (§3 + §5 + §7 resolved) |
+| Field        | Value                             |
+| ------------ | --------------------------------- |
+| Status       | Active                            |
+| Last updated | 2026-05-29 (§8 + §9 added for A4) |
 
 Operational caveats and known follow-ups surfaced during implementation.
 Captured here so the same issues are not rediscovered later. Anything that
@@ -192,3 +192,43 @@ hitting that on the home and skills routes under mobile throttling.
 
 **Status:** documented, not blocking. Treat the ≥ 95 mobile target as
 aspirational pending a future ADR.
+
+## 8. `export const dynamic = "force-static"` is required on every file-convention route under `output: "export"`
+
+Surfaced while building FEAT-007. Every Next.js App Router file-convention
+route that runs server-side at build time — `sitemap.ts`, `robots.ts`,
+`manifest.ts`, `icon.tsx`, `apple-icon.tsx`, `opengraph-image.tsx`, plus
+any future `twitter-image.tsx` — fails the static export with this error
+unless it explicitly opts in to static generation:
+
+```
+Error: export const dynamic = "force-static"/export const revalidate not
+configured on route "/manifest.webmanifest" with "output: export".
+```
+
+The fix is one line per file: `export const dynamic = "force-static";`.
+
+**Why this happens:** Next 15 treats these convention routes as Route
+Handlers by default, and Route Handlers are dynamic-by-default. Static
+export requires every route to be statically resolvable; without the
+`dynamic` opt-in, Next can't prove the handler is deterministic at build
+time.
+
+**Action when adding a new file-convention route:** add
+`export const dynamic = "force-static";` alongside the other module-level
+exports (`size`, `contentType`, etc.). Otherwise `pnpm build` fails with
+the error above and the convention silently doesn't ship.
+
+## 9. Static-export 404 status code varies by host
+
+Surfaced while writing the Playwright smoke test for the custom 404
+([src/app/not-found.tsx](../src/app/not-found.tsx)). Different static
+hosts emit different status codes for the missing-route page:
+
+- Vercel returns `404` and serves `out/404.html`.
+- Cloudflare Pages, GitHub Pages, and `npx serve` typically return `200`
+  with the same HTML.
+
+The smoke test deliberately asserts `response.status() < 500` rather than
+`=== 404` so it doesn't break depending on which host the test runs
+against. If you want a stricter assertion later, gate it on a known host.

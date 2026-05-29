@@ -80,14 +80,17 @@ erDiagram
 
 Top-level site configuration. Exactly one record (in `content/site.json`).
 
-| Attribute    | Type     | Required | Description                          | Constraints       |
-| ------------ | -------- | -------- | ------------------------------------ | ----------------- |
-| ownerName    | string   | yes      | Full name displayed on the site      | 1–100 chars       |
-| tagline      | string   | yes      | Short professional tagline           | 1–160 chars       |
-| contactEmail | string   | yes      | Public-facing email                  | valid email       |
-| location     | string   | no       | City / region                        |                   |
-| socialLinks  | object[] | no       | `{label, url}` entries               | url must be https |
-| careers      | object[] | yes      | Configured career tracks (see below) | min 1             |
+| Attribute    | Type     | Required | Description                                                                                                            | Constraints       |
+| ------------ | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| ownerName    | string   | yes      | Full name displayed on the site                                                                                        | 1–100 chars       |
+| tagline      | string   | yes      | Short professional tagline                                                                                             | 1–160 chars       |
+| contactEmail | string   | yes      | Public-facing email                                                                                                    | valid email       |
+| location     | string   | no       | City / region                                                                                                          |                   |
+| socialLinks  | object[] | no       | `{label, url}` entries                                                                                                 | url must be https |
+| careers      | object[] | yes      | Configured career tracks (see below)                                                                                   | min 1             |
+| siteUrl      | string   | no       | Canonical site URL (e.g. `https://owner.example`). Used for OG/canonical/sitemap. Relative URLs are emitted if absent. | https URL         |
+| repoUrl      | string   | no       | Public repository URL surfaced by the SiteFooter's optional "View source" link.                                        | https URL         |
+| bookingUrl   | string   | no       | Public scheduling URL (Calendly, Cal.com, etc.) surfaced on `/contact` as a "Book a call" button. Omit to suppress.    | https URL         |
 
 **careers entry**
 

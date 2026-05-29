@@ -6,6 +6,7 @@ const INACTIVE_CLASSES = "bg-white text-neutral-700 hover:bg-neutral-100";
 const ITEMS = [
   { id: "skills", label: "Skills", href: "/skills" },
   { id: "education", label: "Education", href: "/education" },
+  { id: "contact", label: "Contact", href: "/contact" },
   { id: "print", label: "Print", href: "/print" },
 ] as const;
 

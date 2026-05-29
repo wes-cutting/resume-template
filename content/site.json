@@ -10,5 +10,8 @@
   "careers": [
     { "id": "software", "label": "Software Engineering", "order": 0 },
     { "id": "events", "label": "Event Production & Operations", "order": 1 }
-  ]
+  ],
+  "siteUrl": "https://alex-rivera.example.com",
+  "repoUrl": "https://github.com/alex-rivera-placeholder/resume-site",
+  "bookingUrl": "https://cal.com/alex-rivera-placeholder/intro"
 }

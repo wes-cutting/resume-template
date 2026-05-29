@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { loadContent } from "@/content/load";
@@ -15,6 +16,21 @@ export function generateStaticParams(): Params[] {
 }
 
 export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { variant } = await params;
+  const { site } = loadContent();
+  const career = getCareerById(site, variant);
+  if (!career) return {};
+  const title = `Printable ${career.label} resume`;
+  return {
+    title,
+    description: `${career.label} resume for ${site.ownerName}.`,
+    alternates: { canonical: `/print/${career.id}` },
+    openGraph: { type: "website", url: `/print/${career.id}`, title },
+    robots: { index: false, follow: true },
+  };
+}
 
 export default async function PrintVariantPage({ params }: { params: Promise<Params> }) {
   const { variant } = await params;

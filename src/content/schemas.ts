@@ -40,6 +40,9 @@ export const SiteSchema = z
       )
       .optional(),
     careers: z.array(SiteCareerSchema).min(1),
+    siteUrl: httpsUrl.optional(),
+    repoUrl: httpsUrl.optional(),
+    bookingUrl: httpsUrl.optional(),
   })
   .strict();
 

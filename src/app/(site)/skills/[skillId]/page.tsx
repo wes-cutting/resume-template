@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { loadContent } from "@/content/load";
@@ -13,6 +14,19 @@ export function generateStaticParams(): Params[] {
 }
 
 export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { skillId } = await params;
+  const { site, skills } = loadContent();
+  const skill = skills.find((s) => s.id === skillId);
+  if (!skill) return {};
+  return {
+    title: skill.name,
+    description: `${site.ownerName}'s use of ${skill.name} across positions, projects, and events.`,
+    alternates: { canonical: `/skills/${skill.id}` },
+    openGraph: { type: "article", url: `/skills/${skill.id}`, title: skill.name },
+  };
+}
 
 export default async function SkillDetailPage({ params }: { params: Promise<Params> }) {
   const { skillId } = await params;

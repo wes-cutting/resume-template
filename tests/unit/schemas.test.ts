@@ -68,6 +68,33 @@ describe("SiteSchema", () => {
     const result = SiteSchema.safeParse({ ...valid, extra: "nope" });
     expect(result.success).toBe(false);
   });
+
+  it("accepts optional siteUrl and repoUrl when they are https URLs", () => {
+    const result = SiteSchema.safeParse({
+      ...valid,
+      siteUrl: "https://alex.example",
+      repoUrl: "https://github.com/example/repo",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects siteUrl that isn't https", () => {
+    const result = SiteSchema.safeParse({ ...valid, siteUrl: "http://insecure.example" });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts an optional bookingUrl when it's an https URL", () => {
+    const result = SiteSchema.safeParse({
+      ...valid,
+      bookingUrl: "https://cal.com/alex/intro",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects bookingUrl that isn't https", () => {
+    const result = SiteSchema.safeParse({ ...valid, bookingUrl: "http://insecure.example" });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("PositionSchema", () => {

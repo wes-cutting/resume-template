@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { loadContent } from "@/content/load";
@@ -12,6 +13,19 @@ export function generateStaticParams(): Params[] {
 }
 
 export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { id } = await params;
+  const { events } = loadContent();
+  const event = events.find((e) => e.id === id);
+  if (!event) return {};
+  return {
+    title: event.name,
+    description: event.summary,
+    alternates: { canonical: `/event/${event.id}` },
+    openGraph: { type: "article", url: `/event/${event.id}`, title: event.name },
+  };
+}
 
 export default async function EventDetailPage({ params }: { params: Promise<Params> }) {
   const { id } = await params;

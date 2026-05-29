@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
+
 import { loadContent } from "@/content/load";
 import { groupSkillsByCategory } from "@/lib/skill-grouping";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SkillsIndex } from "@/components/skills/SkillsIndex";
+
+export function generateMetadata(): Metadata {
+  const { site } = loadContent();
+  return {
+    title: "Skills",
+    description: `Capabilities of ${site.ownerName}, grouped by category.`,
+    alternates: { canonical: "/skills" },
+    openGraph: { type: "website", url: "/skills", title: "Skills" },
+  };
+}
 
 export default function SkillsPage() {
   const { site, skills, skillUsage } = loadContent();

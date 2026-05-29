@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
+
 import { loadContent } from "@/content/load";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { EducationList } from "@/components/education/EducationList";
+
+export function generateMetadata(): Metadata {
+  const { site } = loadContent();
+  return {
+    title: "Education",
+    description: `Education and credentials of ${site.ownerName}.`,
+    alternates: { canonical: "/education" },
+    openGraph: { type: "website", url: "/education", title: "Education" },
+  };
+}
 
 export default function EducationPage() {
   const { site, education } = loadContent();

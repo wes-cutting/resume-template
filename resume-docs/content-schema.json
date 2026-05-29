@@ -59,6 +59,18 @@
               "order": { "type": "integer", "minimum": 0 }
             }
           }
+        },
+        "siteUrl": {
+          "$ref": "#/$defs/httpsUrl",
+          "description": "Canonical site URL (e.g. https://owner.example). Used for OG canonical URLs and sitemap entries. Optional; if omitted, OG/canonical/sitemap URLs are emitted relative."
+        },
+        "repoUrl": {
+          "$ref": "#/$defs/httpsUrl",
+          "description": "Public repository URL surfaced by the SiteFooter's optional 'View source' link. Omit to suppress the link."
+        },
+        "bookingUrl": {
+          "$ref": "#/$defs/httpsUrl",
+          "description": "Public scheduling URL (Calendly, Cal.com, etc.) surfaced on /contact as a 'Book a call' button. Omit to suppress the button."
         }
       }
     },

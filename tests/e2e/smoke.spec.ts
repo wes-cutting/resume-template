@@ -10,6 +10,7 @@ const routes = [
   { path: "/project/ingest-rewrite", h1: /Ingest Rewrite/ },
   { path: "/event/harborlights-festival-2024", h1: /Harborlights/ },
   { path: "/education", h1: /^Education$/ },
+  { path: "/contact", h1: /^Contact$/ },
   // Print routes share an owner-name h1; the variant label is checked via body text below.
   { path: "/print", h1: /Alex Rivera/, body: /Experience/ },
   { path: "/print/software", h1: /Alex Rivera/, body: /Software Engineering/ },
@@ -42,7 +43,7 @@ test("404 page renders for an unknown route", async ({ page }) => {
   const response = await page.goto("/this-route-does-not-exist");
   // Static export serves the 404 page as 200 in some configs; we just check the body.
   expect(response?.status()).toBeLessThan(500);
-  await expect(page.locator("body")).toContainText(/404|not.found/i);
+  await expect(page.locator("body")).toContainText(/404|doesn’t exist/i);
 });
 
 test.describe("print media", () => {
@@ -78,13 +79,14 @@ test("can navigate timeline → position → skill → back", async ({ page }) =
 });
 
 test.describe("primary nav", () => {
-  test("home exposes Skills / Education / Print pills that navigate correctly", async ({
+  test("home exposes Skills / Education / Contact / Print pills that navigate correctly", async ({
     page,
   }) => {
     await page.goto("/");
     const nav = page.getByRole("navigation", { name: "Primary pages" });
     await expect(nav.getByRole("link", { name: "Skills" })).toBeVisible();
     await expect(nav.getByRole("link", { name: "Education" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Contact" })).toBeVisible();
     await expect(nav.getByRole("link", { name: "Print" })).toBeVisible();
 
     await nav.getByRole("link", { name: "Skills" }).click();
@@ -92,6 +94,9 @@ test.describe("primary nav", () => {
     await page.goBack();
     await nav.getByRole("link", { name: "Education" }).click();
     await expect(page).toHaveURL(/\/education\/?$/);
+    await page.goBack();
+    await nav.getByRole("link", { name: "Contact" }).click();
+    await expect(page).toHaveURL(/\/contact\/?$/);
     await page.goBack();
     await nav.getByRole("link", { name: "Print" }).click();
     await expect(page).toHaveURL(/\/print\/?$/);
@@ -101,7 +106,7 @@ test.describe("primary nav", () => {
     await page.goto("/skills");
     const nav = page.getByRole("navigation", { name: "Primary pages" });
     await expect(nav.getByRole("link", { name: "Skills" })).toHaveAttribute("aria-current", "page");
-    await expect(nav.getByRole("link", { name: "Education" })).not.toHaveAttribute(
+    await expect(nav.getByRole("link", { name: "Contact" })).not.toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -111,6 +116,13 @@ test.describe("primary nav", () => {
       page
         .getByRole("navigation", { name: "Primary pages" })
         .getByRole("link", { name: "Education" }),
+    ).toHaveAttribute("aria-current", "page");
+
+    await page.goto("/contact");
+    await expect(
+      page
+        .getByRole("navigation", { name: "Primary pages" })
+        .getByRole("link", { name: "Contact" }),
     ).toHaveAttribute("aria-current", "page");
   });
 
@@ -124,19 +136,36 @@ test.describe("primary nav", () => {
     for (const path of ["/", "/career/software", "/career/events"]) {
       await page.goto(path);
       const nav = page.getByRole("navigation", { name: "Primary pages" });
-      await expect(nav.getByRole("link", { name: "Skills" })).not.toHaveAttribute(
-        "aria-current",
-        "page",
-      );
-      await expect(nav.getByRole("link", { name: "Education" })).not.toHaveAttribute(
-        "aria-current",
-        "page",
-      );
-      await expect(nav.getByRole("link", { name: "Print" })).not.toHaveAttribute(
-        "aria-current",
-        "page",
-      );
+      for (const label of ["Skills", "Education", "Contact", "Print"]) {
+        await expect(nav.getByRole("link", { name: label })).not.toHaveAttribute(
+          "aria-current",
+          "page",
+        );
+      }
     }
+  });
+});
+
+test.describe("contact page (FEAT-008)", () => {
+  test("exposes a mailto link for the contact email", async ({ page }) => {
+    await page.goto("/contact");
+    const link = page.getByRole("link", { name: "alex@example.com" });
+    await expect(link).toHaveAttribute("href", "mailto:alex@example.com");
+  });
+
+  test("renders the Book a call link with target=_blank when bookingUrl is set", async ({
+    page,
+  }) => {
+    await page.goto("/contact");
+    const link = page.getByRole("link", { name: /Book a time on .* calendar/ });
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
+  test("renders the social links under Elsewhere", async ({ page }) => {
+    await page.goto("/contact");
+    await expect(page.getByRole("link", { name: "GitHub" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "LinkedIn" })).toBeVisible();
   });
 });
 
@@ -191,5 +220,62 @@ test.describe("career switcher placement", () => {
       .getByRole("link", { name: "All" })
       .click();
     await expect(page).toHaveURL(/\/?$/);
+  });
+});
+
+test.describe("site polish (FEAT-007)", () => {
+  test("home page exposes OG and Twitter Card meta tags", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator('meta[property="og:title"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:description"]')).toHaveCount(1);
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "profile");
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      "content",
+      "summary_large_image",
+    );
+  });
+
+  test("home page includes JSON-LD Person structured data", async ({ page }) => {
+    await page.goto("/");
+    const jsonLd = await page.locator('script[type="application/ld+json"]').first().textContent();
+    expect(jsonLd).toBeTruthy();
+    const parsed = JSON.parse(jsonLd ?? "{}") as Record<string, unknown>;
+    expect(parsed["@type"]).toBe("Person");
+    expect(parsed.name).toBe("Alex Rivera");
+  });
+
+  test("favicon link is present on /", async ({ page }) => {
+    await page.goto("/");
+    expect(await page.locator('link[rel="icon"]').count()).toBeGreaterThan(0);
+  });
+
+  test("footer renders on non-print routes", async ({ page }) => {
+    await page.goto("/");
+    const footer = page.locator("footer");
+    await expect(footer).toContainText(/Alex Rivera/);
+    await expect(footer).toContainText(/Updated/);
+  });
+
+  test("footer is absent on print routes", async ({ page }) => {
+    await page.goto("/print/software");
+    await expect(page.locator("footer")).toHaveCount(0);
+  });
+
+  test("custom 404 renders with owner name and a Back to home link", async ({ page }) => {
+    const response = await page.goto("/this-route-does-not-exist");
+    expect(response?.status()).toBeLessThan(500);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/doesn’t exist/);
+    await expect(page.getByText("Alex Rivera", { exact: false }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /Back to home/ })).toHaveAttribute("href", "/");
+  });
+
+  test("sitemap.xml and robots.txt are served", async ({ page }) => {
+    const sitemap = await page.goto("/sitemap.xml");
+    expect(sitemap?.status()).toBeLessThan(400);
+    expect(await sitemap?.text()).toMatch(/<url>/);
+
+    const robots = await page.goto("/robots.txt");
+    expect(robots?.status()).toBeLessThan(400);
+    expect(await robots?.text()).toMatch(/Sitemap:/i);
   });
 });

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -17,6 +18,19 @@ export function generateStaticParams(): Params[] {
 }
 
 export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { careerId } = await params;
+  const { site } = loadContent();
+  const career = getCareerById(site, careerId);
+  if (!career) return {};
+  return {
+    title: career.label,
+    description: `${site.ownerName}'s positions on the ${career.label} track.`,
+    alternates: { canonical: `/career/${career.id}` },
+    openGraph: { type: "website", url: `/career/${career.id}`, title: career.label },
+  };
+}
 
 export default async function CareerPage({ params }: { params: Promise<Params> }) {
   const { careerId } = await params;
