@@ -1,0 +1,23 @@
+[
+  {
+    "id": "aurora-stack",
+    "name": "Aurora Stack Co.",
+    "website": "https://aurorastack.example.com",
+    "location": "Remote",
+    "description": "B2B observability platform for distributed systems."
+  },
+  {
+    "id": "lumenfield",
+    "name": "Lumenfield Productions",
+    "website": "https://lumenfield.example.com",
+    "location": "Brooklyn, NY",
+    "description": "Independent live-event production house."
+  },
+  {
+    "id": "northgate",
+    "name": "Northgate Group",
+    "website": "https://northgate.example.com",
+    "location": "Chicago, IL",
+    "description": "Hospitality conglomerate with in-house tech and events teams."
+  }
+]

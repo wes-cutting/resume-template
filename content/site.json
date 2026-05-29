@@ -1,0 +1,14 @@
+{
+  "ownerName": "Alex Rivera",
+  "tagline": "Software engineer and event producer.",
+  "contactEmail": "alex@example.com",
+  "location": "Brooklyn, NY",
+  "socialLinks": [
+    { "label": "GitHub", "url": "https://github.com/alex-rivera-placeholder" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/alex-rivera-placeholder" }
+  ],
+  "careers": [
+    { "id": "software", "label": "Software Engineering", "order": 0 },
+    { "id": "events", "label": "Event Production & Operations", "order": 1 }
+  ]
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "id": "harborlights-festival-2024",
+    "positionId": "lumenfield-lead-producer",
+    "name": "Harborlights Music Festival 2024",
+    "client": "Harborlights Foundation",
+    "date": "2024-07-13",
+    "venue": "Brooklyn Bridge Park",
+    "attendance": 14000,
+    "role": "Producer of Record",
+    "summary": "Two-stage outdoor music festival across a single day with twelve acts and a community zone.",
+    "highlights": [
+      "Coordinated 30+ vendors and a 60-person production crew",
+      "Hit load-in and load-out windows with zero overage charges",
+      "Net Promoter Score of 72 from attendee post-event survey"
+    ],
+    "skillIds": ["stage-management", "vendor-coordination", "budget-management", "av-systems"]
+  },
+  {
+    "id": "northgate-anniversary-gala-2019",
+    "positionId": "northgate-production-manager",
+    "name": "Northgate 25th Anniversary Gala",
+    "client": "Northgate Group",
+    "date": "2019-10-19",
+    "venue": "The Drake Hotel, Chicago",
+    "attendance": 850,
+    "role": "Production Manager",
+    "summary": "Black-tie corporate gala with full plated dinner, three speakers, and a live broadcast to remote venues.",
+    "highlights": [
+      "Designed the run-of-show template now standard across Northgate venues",
+      "Delivered under budget by 8%"
+    ],
+    "skillIds": ["stage-management", "vendor-coordination", "av-systems"]
+  },
+  {
+    "id": "soundstage-product-launch-2024",
+    "positionId": "lumenfield-lead-producer",
+    "name": "Soundstage Product Launch",
+    "client": "Confidential consumer-audio brand",
+    "date": "2024-09-11",
+    "venue": "Industry City, Brooklyn",
+    "attendance": 600,
+    "role": "Lead Producer",
+    "summary": "Invite-only press and influencer launch event for a flagship consumer audio product.",
+    "highlights": [
+      "Custom immersive AV experience with 12-channel spatial audio",
+      "Zero unplanned downtime across the four-hour live window"
+    ],
+    "skillIds": ["av-systems", "vendor-coordination", "project-management"]
+  }
+]

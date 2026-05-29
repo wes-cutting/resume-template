@@ -1,0 +1,34 @@
+[
+  {
+    "id": "ingest-rewrite",
+    "positionId": "aurora-senior-engineer",
+    "name": "Streaming Ingest Rewrite",
+    "summary": "Replaced the legacy Node ingest workers with a Rust-backed pipeline behind a thin TypeScript control plane.",
+    "highlights": [
+      "Cut p99 latency by 42% with no change to client SDKs",
+      "Introduced backpressure-aware batching that survived a 3-hour upstream Kafka outage"
+    ],
+    "skillIds": ["typescript", "nodejs", "postgresql", "aws"],
+    "links": [{ "label": "Internal RFC", "url": "https://aurorastack.example.com/rfc/ingest-v2" }]
+  },
+  {
+    "id": "dashboard-editor-v2",
+    "positionId": "aurora-engineer",
+    "name": "Dashboard Editor v2",
+    "summary": "Rebuilt the dashboard editor from scratch around a React + IndexedDB local-first model.",
+    "highlights": [
+      "Adopted by 80% of paying customers within three months",
+      "Lighthouse performance ≥ 95 on the editor route"
+    ],
+    "skillIds": ["typescript", "react", "nextjs"]
+  },
+  {
+    "id": "northgate-pms-replacement",
+    "positionId": "northgate-software-lead",
+    "name": "In-House Property Management System",
+    "summary": "Replaced a vendor PMS with a Next.js app integrated with point-of-sale and the events schedule.",
+    "highlights": ["Saved $180k/yr in license fees", "Cut nightly close from 90 minutes to 12"],
+    "skillIds": ["python", "typescript", "react", "postgresql"],
+    "confidential": false
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "state-university-bs-cs",
+    "institution": "State University",
+    "credential": "B.S. Computer Science",
+    "field": "Computer Science",
+    "startDate": "2013-09",
+    "endDate": "2017-05",
+    "highlights": [
+      "Senior thesis on streaming join algorithms",
+      "Teaching assistant for the introductory systems course"
+    ]
+  },
+  {
+    "id": "conservatory-stage-cert",
+    "institution": "Midwest Conservatory",
+    "credential": "Certificate, Stage Management",
+    "field": "Live Production",
+    "startDate": "2019-01",
+    "endDate": "2020-06",
+    "highlights": ["Practicum with a regional repertory theater across two seasons"]
+  }
+]

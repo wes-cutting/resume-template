@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/resume-site/content-schema.json",
+  "title": "Resume Site Content Schema",
+  "description": "Schemas for the JSON content files under /content/. Source of truth for shapes shared by the loader and docs.",
+  "type": "object",
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Lowercase kebab-case identifier."
+    },
+    "monthDate": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+      "description": "YYYY-MM."
+    },
+    "dayDate": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$",
+      "description": "YYYY-MM-DD."
+    },
+    "httpsUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "Site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownerName", "tagline", "contactEmail", "careers"],
+      "properties": {
+        "ownerName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "tagline": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "contactEmail": { "type": "string", "format": "email" },
+        "location": { "type": "string" },
+        "socialLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "url"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "url": { "$ref": "#/$defs/httpsUrl" }
+            }
+          }
+        },
+        "careers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "label", "order"],
+            "properties": {
+              "id": { "$ref": "#/$defs/slug" },
+              "label": { "type": "string", "minLength": 1 },
+              "order": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "Employer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "website": { "$ref": "#/$defs/httpsUrl" },
+        "location": { "type": "string" },
+        "description": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "Position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "employerId", "title", "career", "startDate", "summary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "employerId": {
+          "$ref": "#/$defs/slug",
+          "description": "Must reference an existing Employer.id"
+        },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "career": { "$ref": "#/$defs/slug", "description": "Must reference a Site.careers[].id" },
+        "startDate": { "$ref": "#/$defs/monthDate" },
+        "endDate": { "$ref": "#/$defs/monthDate", "description": "Omit to indicate current role." },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "highlights": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "skillIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug", "description": "Must reference an existing Skill.id" }
+        },
+        "location": { "type": "string" }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "positionId", "name", "summary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "positionId": {
+          "$ref": "#/$defs/slug",
+          "description": "Must reference an existing Position.id"
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "highlights": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "skillIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug" }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "url"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "url": { "$ref": "#/$defs/httpsUrl" }
+            }
+          }
+        },
+        "confidential": { "type": "boolean", "default": false },
+        "confidentialLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Optional generic label shown in place of the employer when 'confidential' is true (e.g. 'Confidential — Fortune 500 retailer'). Omit to suppress the employer attribution entirely."
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "positionId", "name", "date", "role", "summary"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "positionId": {
+          "$ref": "#/$defs/slug",
+          "description": "Must reference an existing Position.id"
+        },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "client": { "type": "string" },
+        "date": { "$ref": "#/$defs/dayDate" },
+        "venue": { "type": "string" },
+        "attendance": { "type": "integer", "minimum": 0 },
+        "role": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "highlights": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "skillIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/slug" }
+        }
+      }
+    },
+    "Skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "category"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "category": { "type": "string", "minLength": 1 },
+        "proficiency": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "description": { "type": "string", "maxLength": 200 }
+      }
+    },
+    "Education": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "institution", "credential"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "institution": { "type": "string", "minLength": 1 },
+        "credential": { "type": "string", "minLength": 1 },
+        "field": { "type": "string" },
+        "startDate": { "$ref": "#/$defs/monthDate" },
+        "endDate": { "$ref": "#/$defs/monthDate" },
+        "highlights": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        }
+      }
+    }
+  },
+  "properties": {
+    "site": { "$ref": "#/$defs/Site" },
+    "employers": { "type": "array", "items": { "$ref": "#/$defs/Employer" } },
+    "positions": { "type": "array", "items": { "$ref": "#/$defs/Position" } },
+    "projects": { "type": "array", "items": { "$ref": "#/$defs/Project" } },
+    "events": { "type": "array", "items": { "$ref": "#/$defs/Event" } },
+    "skills": { "type": "array", "items": { "$ref": "#/$defs/Skill" } },
+    "education": { "type": "array", "items": { "$ref": "#/$defs/Education" } }
+  },
+  "additionalProperties": false
+}

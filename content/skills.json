@@ -1,0 +1,41 @@
+[
+  { "id": "typescript", "name": "TypeScript", "category": "language", "proficiency": 5 },
+  { "id": "python", "name": "Python", "category": "language", "proficiency": 4 },
+  { "id": "react", "name": "React", "category": "framework", "proficiency": 5 },
+  { "id": "nextjs", "name": "Next.js", "category": "framework", "proficiency": 5 },
+  { "id": "nodejs", "name": "Node.js", "category": "framework", "proficiency": 4 },
+  { "id": "postgresql", "name": "PostgreSQL", "category": "database", "proficiency": 4 },
+  { "id": "aws", "name": "AWS", "category": "platform", "proficiency": 4 },
+  {
+    "id": "stage-management",
+    "name": "Stage management",
+    "category": "operations",
+    "proficiency": 5,
+    "description": "Run-of-show authoring, calling cues, crew coordination."
+  },
+  {
+    "id": "vendor-coordination",
+    "name": "Vendor coordination",
+    "category": "operations",
+    "proficiency": 5
+  },
+  {
+    "id": "budget-management",
+    "name": "Budget management",
+    "category": "operations",
+    "proficiency": 4
+  },
+  {
+    "id": "av-systems",
+    "name": "AV systems",
+    "category": "vendor-tools",
+    "proficiency": 4,
+    "description": "QLab, Dante, large-format LED, line-array PA."
+  },
+  {
+    "id": "project-management",
+    "name": "Project management",
+    "category": "cross-track",
+    "proficiency": 5
+  }
+]

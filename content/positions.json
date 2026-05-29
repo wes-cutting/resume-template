@@ -1,0 +1,97 @@
+[
+  {
+    "id": "aurora-senior-engineer",
+    "employerId": "aurora-stack",
+    "title": "Senior Software Engineer",
+    "career": "software",
+    "startDate": "2022-03",
+    "summary": "Lead engineer on the streaming-ingest pipeline, on call rotation, and platform-team mentor.",
+    "highlights": [
+      "Cut p99 ingest latency by 42% by rewriting the hot path in Rust-backed workers",
+      "Designed an at-least-once retry protocol that survived an upstream Kafka outage with zero data loss",
+      "Mentored four junior engineers; two promoted within 18 months"
+    ],
+    "skillIds": [
+      "typescript",
+      "react",
+      "nextjs",
+      "nodejs",
+      "postgresql",
+      "aws",
+      "project-management"
+    ],
+    "location": "Remote"
+  },
+  {
+    "id": "aurora-engineer",
+    "employerId": "aurora-stack",
+    "title": "Software Engineer",
+    "career": "software",
+    "startDate": "2020-01",
+    "endDate": "2022-02",
+    "summary": "Full-stack engineer on the alerting and dashboards team.",
+    "highlights": [
+      "Shipped the v2 dashboard editor used by 80% of paying customers",
+      "Owned weekly release train across three product teams"
+    ],
+    "skillIds": ["typescript", "react", "nodejs", "postgresql"],
+    "location": "Remote"
+  },
+  {
+    "id": "northgate-software-lead",
+    "employerId": "northgate",
+    "title": "Software Lead, Internal Tools",
+    "career": "software",
+    "startDate": "2017-06",
+    "endDate": "2019-12",
+    "summary": "Built and maintained reservation, point-of-sale, and back-of-house tooling for a regional hotel and venue network.",
+    "highlights": [
+      "Replaced a vendor PMS with an in-house Next.js app, saving $180k/yr in license fees",
+      "Stood up the team's first CI/CD pipeline; cut release time from two weeks to two hours"
+    ],
+    "skillIds": ["python", "typescript", "react", "postgresql", "aws"],
+    "location": "Chicago, IL"
+  },
+  {
+    "id": "northgate-production-manager",
+    "employerId": "northgate",
+    "title": "Production Manager, Venue Events",
+    "career": "events",
+    "startDate": "2018-09",
+    "endDate": "2020-05",
+    "summary": "Ran production for in-house corporate and private events across three Northgate venues while continuing software work.",
+    "highlights": [
+      "Produced 60+ events per year ranging from 50 to 1,200 guests",
+      "Built the run-of-show template library now used across all Northgate venues"
+    ],
+    "skillIds": [
+      "stage-management",
+      "vendor-coordination",
+      "budget-management",
+      "av-systems",
+      "project-management"
+    ],
+    "location": "Chicago, IL"
+  },
+  {
+    "id": "lumenfield-lead-producer",
+    "employerId": "lumenfield",
+    "title": "Lead Producer",
+    "career": "events",
+    "startDate": "2023-06",
+    "summary": "Lead producer on flagship festivals, corporate galas, and brand activations.",
+    "highlights": [
+      "Producer-of-record on a 14,000-attendee outdoor music festival across two stages",
+      "Owns the vendor roster and the production-budget model used company-wide",
+      "On-site lead for cross-functional crews of 30+ on multi-day builds"
+    ],
+    "skillIds": [
+      "stage-management",
+      "vendor-coordination",
+      "budget-management",
+      "av-systems",
+      "project-management"
+    ],
+    "location": "Brooklyn, NY"
+  }
+]
