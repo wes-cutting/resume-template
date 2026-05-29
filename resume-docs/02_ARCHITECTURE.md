@@ -108,3 +108,4 @@ print-optimized stylesheet.
 | ADR-0001 | Tech stack: Next.js + TypeScript + Tailwind               | Accepted | 2026-05-27 |
 | ADR-0002 | Content as git-tracked files, validated by Zod            | Accepted | 2026-05-27 |
 | ADR-0003 | `Position.career` as the single tag driving all filtering | Accepted | 2026-05-27 |
+| ADR-0004 | Accept the v1 Lighthouse mobile Performance gap           | Accepted | 2026-05-29 |

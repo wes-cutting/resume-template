@@ -1,9 +1,9 @@
 # Tooling notes
 
-| Field        | Value                      |
-| ------------ | -------------------------- |
-| Status       | Active                     |
-| Last updated | 2026-05-28 (roadmap split) |
+| Field        | Value                              |
+| ------------ | ---------------------------------- |
+| Status       | Active                             |
+| Last updated | 2026-05-29 (§3 + §5 + §7 resolved) |
 
 Operational caveats and known follow-ups surfaced during implementation.
 Captured here so the same issues are not rediscovered later. Anything that
@@ -44,16 +44,29 @@ required.
 
 ## 3. `next lint` is deprecated
 
-`pnpm lint` currently runs `next lint`, which Next.js 15 still ships but
-prints a deprecation warning ("will be removed in Next.js 16"). The
-upstream-recommended migration is the codemod:
+**Resolved 2026-05-29 (roadmap B2).** Kept for context.
 
-```sh
-npx @next/codemod@canary next-lint-to-eslint-cli .
-```
+`pnpm lint` previously ran `next lint`, which Next.js 15 shipped with a
+deprecation warning ("will be removed in Next.js 16"). The upstream codemod
+(`npx @next/codemod@canary next-lint-to-eslint-cli .`) ran successfully on
+the script but produced an `eslint.config.mjs` that didn't actually work
+here — two issues worth recording for anyone running the same codemod in
+the future:
 
-**Status:** deferred. Tracked here; will revisit before upgrading to Next 16.
-No behavioural impact today — lint runs clean.
+1. The codemod's bare-specifier imports
+   (`import nextCoreWebVitals from "eslint-config-next/core-web-vitals";`)
+   don't resolve under ESM because `eslint-config-next` v15 has no
+   `exports` field; explicit `.js` extensions are required.
+2. Even with the imports fixed, `eslint-config-next/core-web-vitals.js`
+   and `eslint-config-next/typescript.js` still export **legacy** config
+   objects (`{ extends, rules }`), not flat-config arrays. They're not
+   iterable, so the codemod's `...` spread fails. The pre-codemod
+   `FlatCompat` bridge is still the correct shape.
+
+Final state: `pnpm lint` runs `eslint .` directly; the deprecation banner
+is gone; the project keeps the FlatCompat bridge with `@eslint/eslintrc`;
+`next-env.d.ts` was added to the ignore list since `next lint` had
+implicitly excluded it.
 
 ## 4. Seed content shape
 
@@ -134,6 +147,11 @@ print-media advisory and a timeline → position → skill → back navigation
 walk. Run with `pnpm test:e2e`.
 
 ## 7. Lighthouse mobile performance is below the ≥ 95 target on the home and skills routes
+
+**Resolved 2026-05-29** via [ADR-0004](adr/ADR-0004-accept-mobile-perf-gap.md)
+— PRD §5's mobile ≥ 95 Performance target was relaxed to a per-category,
+per-platform table that reflects what the current Next.js stack reliably
+delivers. Kept here for the historical measurement context.
 
 Lighthouse desktop preset (Lighthouse defaults — Chromium headless, cold
 cache, no throttling) over the five main routes:

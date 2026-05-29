@@ -4,8 +4,8 @@
 | ------------ | -------------------------------- |
 | Status       | Active                           |
 | Owner        | Site owner (single-user project) |
-| Last updated | 2026-05-28                       |
-| Version      | 0.2.0                            |
+| Last updated | 2026-05-29                       |
+| Version      | 0.3.0                            |
 
 ## 1. Problem statement
 
@@ -47,13 +47,13 @@ relevant to them, and produce traditional resume documents on demand.
 
 ## 5. Success metrics
 
-| Metric                          | Target                                                                            | How measured                                  |
-| ------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------- |
-| Time to add a new position      | < 5 minutes                                                                       | Manual timing: edit JSON, commit, see live    |
-| Time to add a new career track  | < 1 day                                                                           | Effort to add a new `career` value end-to-end |
-| Print fidelity                  | Events resume ≤ 2 pages; software and unified resumes ≤ 3 pages; no manual tweaks | Manual review of each of 3 print outputs      |
-| Build time                      | < 30 seconds                                                                      | CI build duration                             |
-| Lighthouse performance (mobile) | ≥ 95                                                                              | Lighthouse CI on production build             |
+| Metric                                                              | Target                                                                                                       | How measured                                  |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
+| Time to add a new position                                          | < 5 minutes                                                                                                  | Manual timing: edit JSON, commit, see live    |
+| Time to add a new career track                                      | < 1 day                                                                                                      | Effort to add a new `career` value end-to-end |
+| Print fidelity                                                      | Events resume ≤ 2 pages; software and unified resumes ≤ 3 pages; no manual tweaks                            | Manual review of each of 3 print outputs      |
+| Build time                                                          | < 30 seconds                                                                                                 | CI build duration                             |
+| Lighthouse (per [ADR-0004](adr/ADR-0004-accept-mobile-perf-gap.md)) | Performance ≥ 75 mobile / ≥ 90 desktop; Accessibility ≥ 95; Best Practices ≥ 95; SEO ≥ 95 on the main routes | Lighthouse CI on the production static export |
 
 ## 6. Key user journeys
 
