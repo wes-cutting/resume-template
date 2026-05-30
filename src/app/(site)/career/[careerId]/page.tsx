@@ -48,14 +48,14 @@ export default async function CareerPage({ params }: { params: Promise<Params> }
       <main className="mx-auto max-w-3xl px-6 py-10">
         <section className="mb-8 flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
           <div>
-            <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-              Career
-            </p>
-            <h1 className="text-2xl font-semibold tracking-tight">{career.label}</h1>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Career</p>
+            <h1 className="font-headings text-2xl font-semibold tracking-tight text-foreground">
+              {career.label}
+            </h1>
           </div>
           <Link
             href={`/print/${career.id}`}
-            className="rounded-full border border-neutral-300 px-3 py-1 text-xs font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
+            className="rounded-full border border-input px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
           >
             Print resume
           </Link>

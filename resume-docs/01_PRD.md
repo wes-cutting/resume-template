@@ -1,11 +1,11 @@
 # Product Requirements Document — Resume Website
 
-| Field        | Value                            |
-| ------------ | -------------------------------- |
-| Status       | Active                           |
-| Owner        | Site owner (single-user project) |
-| Last updated | 2026-05-29                       |
-| Version      | 0.3.0                            |
+| Field        | Value                                           |
+| ------------ | ----------------------------------------------- |
+| Status       | Active                                          |
+| Owner        | Site owner (first user of the template; see §2) |
+| Last updated | 2026-05-30                                      |
+| Version      | 0.4.0                                           |
 
 ## 1. Problem statement
 
@@ -16,6 +16,16 @@ for space and obscures the cross-pollination between them. The site needs to
 present both tracks coherently while letting visitors focus on whichever is
 relevant to them, and produce traditional resume documents on demand.
 
+**Framing shift (2026-05-30, v0.4.0):** the project is now intended as a
+**resume template that the owner is the first user of**. The functional
+problem above is unchanged — the owner still ships their own site against
+the same content model. What changes is that the codebase should let
+_other_ people clone, fill with their own history, and re-skin to match
+their own personal brand without editing component code. See §2 (Goals)
+and §3 (Non-goals) for what this does and does not mean, and
+[ADR-0005](adr/ADR-0005-semantic-token-theming.md) for the architectural
+consequence.
+
 ## 2. Goals
 
 - Present a complete professional history with two (and potentially more) career
@@ -25,6 +35,16 @@ relevant to them, and produce traditional resume documents on demand.
 - Generate role-appropriate printed resumes from the same underlying data.
 - Be trivially editable by the owner: edit content files, commit, deploy.
 - Be extensible to a third career track without structural rewrites.
+- **Be re-skinnable in a single file.** Visual identity (colors,
+  typography, the four track tints) lives in `src/styles/theme.css`.
+  Template users can change the entire look by editing that one file;
+  no component code edits required. See
+  [ADR-0005](adr/ADR-0005-semantic-token-theming.md) and
+  [FEAT-012](features/theming.md).
+- **Be safely forkable as a template.** A new user should be able to
+  clone the repo, replace `content/*.json` with their own history,
+  optionally edit `theme.css`, and have a working personal site
+  without touching component code, the loader, or the schemas.
 
 ## 3. Non-goals / out of scope
 
@@ -35,15 +55,25 @@ relevant to them, and produce traditional resume documents on demand.
 - No blog, articles, or long-form writing surface (may be added later; not now).
 - No contact form with email backend. A `mailto:` link is sufficient.
 - No multi-language support in v1.
+- **Not a theme marketplace or hosted SaaS.** The template framing
+  added in v0.4.0 means anyone can fork the repo and ship a personal
+  site. It does **not** mean the project hosts other people's
+  content, ships a theme picker UI, or operates a centralized service.
+  Each forked deployment is independent.
+- **Not a design system for arbitrary websites.** The token
+  vocabulary in [FEAT-012](features/theming.md) is scoped to what
+  this resume site needs. It is not a general-purpose design system,
+  and the surface area should not grow to serve unrelated use cases.
 
 ## 4. Target users / personas
 
-| Persona                   | Description                              | Primary needs                                                            |
-| ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------ |
-| Technical recruiter       | Hiring for software roles                | Quick scan of software experience, technical skills, downloadable resume |
-| Events recruiter / client | Hiring for production / operations roles | Events history, scale of productions, downloadable resume                |
-| Hybrid hiring manager     | Roles where both skill sets apply        | Unified view, evidence of cross-domain ability                           |
-| Owner                     | Maintains and shares the site            | Easy editing, accurate print output, professional appearance             |
+| Persona                       | Description                                                   | Primary needs                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Technical recruiter           | Hiring for software roles                                     | Quick scan of software experience, technical skills, downloadable resume                                        |
+| Events recruiter / client     | Hiring for production / operations roles                      | Events history, scale of productions, downloadable resume                                                       |
+| Hybrid hiring manager         | Roles where both skill sets apply                             | Unified view, evidence of cross-domain ability                                                                  |
+| Owner (first template user)   | Maintains and shares the site                                 | Easy editing, accurate print output, professional appearance                                                    |
+| **Template adopter** (v0.4.0) | Developer who forked the repo to ship their own personal site | Replace `content/*.json` with their own history; optionally edit `src/styles/theme.css` to match personal brand |
 
 ## 5. Success metrics
 
@@ -74,10 +104,15 @@ relevant to them, and produce traditional resume documents on demand.
 - **Constraints**
   - Static site — no runtime server logic required.
   - Content lives in the repo as structured files (see Domain Model).
-  - Single owner; no concurrent editing concerns.
+  - Single owner per deployed instance; no concurrent editing concerns.
   - Print outputs must work in default browser print-to-PDF without extensions.
+  - Re-skinning must be possible without editing component code
+    (per Goals §2 and [ADR-0005](adr/ADR-0005-semantic-token-theming.md)).
 - **Assumptions**
-  - The owner is comfortable editing JSON files and using git.
+  - The owner (or template adopter) is comfortable editing JSON files
+    and using git.
+  - Template adopters who want to re-skin are comfortable editing CSS
+    custom properties; they are not designers with a UI tool.
   - Visitors use a modern evergreen browser.
   - A third career track, if added, will be structurally similar to the
     existing two (chronological, employer-anchored, skill-tagged).

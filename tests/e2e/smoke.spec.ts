@@ -343,6 +343,41 @@ test.describe("dark mode (FEAT-010)", () => {
   });
 });
 
+test.describe("theming (FEAT-012)", () => {
+  // FEAT-012 §10 — token-override regression. Confirms the re-skin path
+  // works end-to-end: overriding a CSS custom property via an injected
+  // stylesheet propagates through the @theme projection into the rendered
+  // Tailwind utility class. If this passes, an adopter editing
+  // src/styles/theme.css will see their changes apply across the site.
+  test("body background follows a runtime override of --color-background", async ({ browser }) => {
+    const ctx = await browser.newContext({ colorScheme: "light" });
+    const page = await ctx.newPage();
+    try {
+      await page.goto("/");
+
+      // Sanity: baseline body bg in light mode is comfortably light.
+      const value = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+      const baselineOk = /oklch\(\s*0\.9[0-9]/.test(value) || /oklch\(\s*1\b/.test(value);
+      expect(baselineOk, `unexpected baseline body bg: ${value}`).toBe(true);
+
+      // Inject a stylesheet that overrides the theme token to a mid-luminosity colour.
+      await page.addStyleTag({
+        content: ":root { --color-background: oklch(0.5 0.15 30); }",
+      });
+
+      // After the override, the body bg utility should reflect L≈0.5.
+      const afterValue = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+      const match = /oklch\(\s*([0-9.]+)/.exec(afterValue);
+      expect(match, `no oklch match in ${afterValue}`).not.toBeNull();
+      const lightness = Number(match?.[1] ?? "1");
+      expect(lightness).toBeGreaterThan(0.4);
+      expect(lightness).toBeLessThan(0.6);
+    } finally {
+      await ctx.close();
+    }
+  });
+});
+
 test.describe("site polish (FEAT-007)", () => {
   test("home page exposes OG and Twitter Card meta tags", async ({ page }) => {
     await page.goto("/");

@@ -1,16 +1,11 @@
 @import "tailwindcss";
+@import "./theme.css";
 
-/* FEAT-010 — dark mode (auto-only via prefers-color-scheme).
- * The `dark:` utility variant resolves through the system media query, with no
- * runtime toggle and no `'use client'` boundary (preserving the
- * zero-client-component property from ADR-0004).
+/* FEAT-012 — theming via semantic tokens. The `@custom-variant dark`
+ * declaration added in A7 (FEAT-010) is removed: components no longer
+ * use `dark:` variants. Tokens defined in theme.css already respond to
+ * `prefers-color-scheme: dark` at the CSS-variable layer.
  *
- * Tailwind v4's default `dark` variant already uses
- * `(prefers-color-scheme: dark)`. Declaring it explicitly here keeps the
- * intent obvious and pins it against any future Tailwind default change.
- *
- * Note: print routes must stay light regardless of system theme — see
- * `print.css`, whose @media print rules use `!important` to override any
- * dark utilities that would otherwise apply during print.
+ * Architectural rationale: resume-docs/adr/ADR-0005-semantic-token-theming.md
+ * Vocabulary and component contract: resume-docs/features/theming.md
  */
-@custom-variant dark (@media (prefers-color-scheme: dark));

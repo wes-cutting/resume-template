@@ -32,7 +32,12 @@ features/
 content-schema.json                Machine-readable schema for content files
 tooling-notes.md                   Operational caveats from initial scaffolding
 roadmap.md                         Active roadmap — what's left, phased by lifecycle
-dod-reports/                       Definition-of-Done snapshots (append new dated files; do not edit prior ones)
+dod-reports/                       Definition-of-Done snapshots (append new dated files; do not edit prior ones).
+                                    Filename: `dod-report-YYYY-MM-DD-NN.md` where `NN` is a zero-padded
+                                    sequence number (`-01`, `-02`, …) for the Nth report on that date.
+                                    Allows multiple reports to land on the same day. The single
+                                    `dod-report-2026-05-28.md` predates the convention; everything from
+                                    `2026-05-29` onward uses the `-NN` suffix.
 ```
 
 ## Reading order for an agent

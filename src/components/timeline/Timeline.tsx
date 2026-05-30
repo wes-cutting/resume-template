@@ -14,7 +14,7 @@ export function Timeline({
     return (
       <p
         role="status"
-        className="rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400"
+        className="rounded-md border border-dashed border-input bg-card px-4 py-6 text-center text-sm text-muted-foreground"
       >
         {emptyMessage}
       </p>

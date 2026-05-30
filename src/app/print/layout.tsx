@@ -16,7 +16,10 @@ import type { ReactNode } from "react";
  */
 export default function PrintLayout({ children }: { children: ReactNode }) {
   return (
-    <div data-testid="print-shell" className="min-h-screen bg-white text-neutral-900">
+    <div
+      data-testid="print-shell"
+      className="min-h-screen bg-print-background text-print-foreground"
+    >
       {children}
     </div>
   );

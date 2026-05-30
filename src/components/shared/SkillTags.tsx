@@ -14,7 +14,7 @@ export function SkillTags({
     <section aria-labelledby="skill-tags-heading">
       <h3
         id="skill-tags-heading"
-        className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
+        className="text-sm font-medium uppercase tracking-wide text-muted-foreground"
       >
         {label}
       </h3>
@@ -23,7 +23,7 @@ export function SkillTags({
           <li key={skill.id} className="list-none">
             <Link
               href={`/skills/${skill.id}`}
-              className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-700 hover:bg-neutral-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700 dark:focus-visible:ring-neutral-100"
+              className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground hover:bg-input focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {skill.name}
             </Link>

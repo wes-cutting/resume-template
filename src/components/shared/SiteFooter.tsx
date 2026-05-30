@@ -17,7 +17,7 @@ export function SiteFooter({ site }: { site: Site }) {
   return (
     <footer
       data-print="hide"
-      className="mt-16 border-t border-neutral-200 px-6 py-6 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+      className="mt-16 border-t border-border px-6 py-6 text-xs text-muted-foreground"
     >
       <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <p>

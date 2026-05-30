@@ -1,0 +1,189 @@
+/* ============================================================================
+ * theme.css — single source of truth for visual identity
+ * ============================================================================
+ * Template adopters re-skin the entire site by editing the values below.
+ * No component code edits required.
+ *
+ * Tokens are defined as CSS custom properties under `:root` with
+ * `@media (prefers-color-scheme: dark)` overrides folded in, then projected
+ * to Tailwind utility class names via the `@theme` directive.
+ *
+ * Component contract (enforced by ESLint — see eslint.config.mjs):
+ *   • Components reference semantic tokens (bg-background, text-foreground,
+ *     bg-track-1, etc.) — never raw Tailwind color utilities, never `dark:`
+ *     variants.
+ *   • Print components are exempt and use the print-* token namespace,
+ *     which intentionally does not respond to system theme.
+ *
+ * Vocabulary, mapping, and rationale: resume-docs/features/theming.md
+ * Architectural decision: resume-docs/adr/ADR-0005-semantic-token-theming.md
+ *
+ * Default direction (2026-05-30 per FEAT-012 / owner sign-off):
+ *   "Professional, warm but restrained." Subtle warm-neutral surface in
+ *   light, slight cool-neutral bias in dark, freshened track tints,
+ *   Fraunces variable serif for headings (loaded from app/layout.tsx).
+ *
+ * Color values are OKLCH (perceptually uniform; aligns with Tailwind v4's
+ * default palette).
+ * ========================================================================= */
+
+:root {
+  /* ---- Surfaces and their text -------------------------------------- */
+  /* background: subtle warm white (hue 80 = warm yellow, chroma 0.005 ≈ barely-there) */
+  --color-background: oklch(0.992 0.005 80);
+  --color-foreground: oklch(0.21 0.012 80);
+
+  /* card: one step warmer than background; used for hovers and elevated panels */
+  --color-card: oklch(0.975 0.006 80);
+  --color-card-foreground: oklch(0.21 0.012 80);
+
+  /* muted: subtle inset for chips and sticky-header backdrop */
+  --color-muted: oklch(0.94 0.006 80);
+  --color-muted-foreground: oklch(0.45 0.012 80);
+
+  /* ---- Borders and rings -------------------------------------------- */
+  --color-border: oklch(0.91 0.006 80);
+  --color-input: oklch(0.85 0.008 80);
+  --color-ring: oklch(0.21 0.012 80);
+
+  /* ---- Accent / call-to-action -------------------------------------- */
+  --color-accent: oklch(0.21 0.012 80);
+  --color-accent-foreground: oklch(0.99 0 0);
+  --color-accent-hover: oklch(0.31 0.014 80);
+
+  /* ---- Track tints (4 sets; baseline supports 2; modulo-wraps in TrackBadge) --
+   * Each track ships three tokens: chip background, foreground text, edge
+   * (border + ring). Hues chosen to remain distinguishable in both themes
+   * even for visitors with mild color-vision deficiency; TrackBadge also
+   * carries a monogram so colour is never the sole affordance. */
+
+  /* Track 1: sky-leaning */
+  --color-track-1: oklch(0.96 0.04 230);
+  --color-track-1-foreground: oklch(0.4 0.13 235);
+  --color-track-1-edge: oklch(0.85 0.07 230);
+
+  /* Track 2: amber-leaning */
+  --color-track-2: oklch(0.96 0.06 75);
+  --color-track-2-foreground: oklch(0.45 0.13 65);
+  --color-track-2-edge: oklch(0.85 0.09 70);
+
+  /* Track 3: emerald-leaning (for an eventual third track) */
+  --color-track-3: oklch(0.96 0.05 155);
+  --color-track-3-foreground: oklch(0.42 0.12 155);
+  --color-track-3-edge: oklch(0.85 0.08 155);
+
+  /* Track 4: violet-leaning (for an eventual fourth track) */
+  --color-track-4: oklch(0.96 0.04 295);
+  --color-track-4-foreground: oklch(0.42 0.13 295);
+  --color-track-4-edge: oklch(0.85 0.07 295);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* ---- Surfaces (cool-neutral bias for OLED comfort) ---------------- */
+    /* hue 250 = cool blue; very low chroma keeps it "neutral with a tilt" */
+    --color-background: oklch(0.18 0.007 250);
+    --color-foreground: oklch(0.965 0.005 250);
+
+    --color-card: oklch(0.22 0.008 250);
+    --color-card-foreground: oklch(0.965 0.005 250);
+
+    --color-muted: oklch(0.27 0.008 250);
+    --color-muted-foreground: oklch(0.7 0.008 250);
+
+    /* ---- Borders and rings ------------------------------------------ */
+    --color-border: oklch(0.3 0.008 250);
+    --color-input: oklch(0.4 0.01 250);
+    --color-ring: oklch(0.965 0.005 250);
+
+    /* ---- Accent (inverts in dark — light pill, dark text) ----------- */
+    --color-accent: oklch(0.965 0.005 250);
+    --color-accent-foreground: oklch(0.18 0.007 250);
+    --color-accent-hover: oklch(0.85 0.008 250);
+
+    /* ---- Track tints (lift text, darken background, mid-tint edges) - */
+    --color-track-1: oklch(0.25 0.05 230);
+    --color-track-1-foreground: oklch(0.86 0.09 230);
+    --color-track-1-edge: oklch(0.4 0.07 230);
+
+    --color-track-2: oklch(0.25 0.06 70);
+    --color-track-2-foreground: oklch(0.85 0.1 75);
+    --color-track-2-edge: oklch(0.4 0.08 70);
+
+    --color-track-3: oklch(0.25 0.05 155);
+    --color-track-3-foreground: oklch(0.85 0.09 155);
+    --color-track-3-edge: oklch(0.4 0.07 155);
+
+    --color-track-4: oklch(0.25 0.05 295);
+    --color-track-4-foreground: oklch(0.85 0.09 295);
+    --color-track-4-edge: oklch(0.4 0.07 295);
+  }
+}
+
+/* ---- Print tokens (light-only; do NOT respond to prefers-color-scheme) ---
+ * Print components reference these via bg-print-background,
+ * text-print-foreground, etc. They guarantee the print-light invariant from
+ * FEAT-010 §4 US-3 / A7 — a dark-OS visitor printing the resume gets a clean
+ * white sheet. */
+:root {
+  --color-print-background: oklch(1 0 0);
+  --color-print-foreground: oklch(0.15 0 0);
+  --color-print-muted-foreground: oklch(0.4 0 0);
+  --color-print-border: oklch(0.85 0 0);
+}
+
+/* ---- Project tokens onto Tailwind utility classes -----------------------
+ * Each --color-* token below generates bg-*, text-*, border-*, ring-*,
+ * divide-*, from-*, to-* utility classes in Tailwind v4.
+ * Font-* tokens generate font-* utility classes (font-body, font-headings).
+ * The actual font families are loaded in app/layout.tsx via next/font and
+ * exposed as --font-sans-body and --font-serif-display CSS variables. */
+@theme {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-card: var(--color-card);
+  --color-card-foreground: var(--color-card-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-accent-hover: var(--color-accent-hover);
+
+  --color-track-1: var(--color-track-1);
+  --color-track-1-foreground: var(--color-track-1-foreground);
+  --color-track-1-edge: var(--color-track-1-edge);
+
+  --color-track-2: var(--color-track-2);
+  --color-track-2-foreground: var(--color-track-2-foreground);
+  --color-track-2-edge: var(--color-track-2-edge);
+
+  --color-track-3: var(--color-track-3);
+  --color-track-3-foreground: var(--color-track-3-foreground);
+  --color-track-3-edge: var(--color-track-3-edge);
+
+  --color-track-4: var(--color-track-4);
+  --color-track-4-foreground: var(--color-track-4-foreground);
+  --color-track-4-edge: var(--color-track-4-edge);
+
+  --color-print-background: var(--color-print-background);
+  --color-print-foreground: var(--color-print-foreground);
+  --color-print-muted-foreground: var(--color-print-muted-foreground);
+  --color-print-border: var(--color-print-border);
+
+  /* Typography — actual values set via next/font in app/layout.tsx */
+  --font-body: var(
+    --font-sans-body,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif
+  );
+  --font-headings: var(--font-serif-display, ui-serif, Georgia, Cambria, "Times New Roman", serif);
+  --font-print: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+}

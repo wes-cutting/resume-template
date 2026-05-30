@@ -18,7 +18,7 @@ export function PrintEducationSection({ education }: { education: readonly Educa
     <section aria-labelledby="print-education-heading" className="break-inside-avoid">
       <h2
         id="print-education-heading"
-        className="break-after-avoid text-sm font-semibold uppercase tracking-wider text-neutral-900"
+        className="font-headings break-after-avoid text-sm font-semibold uppercase tracking-wider text-print-foreground"
       >
         Education
       </h2>
@@ -26,11 +26,16 @@ export function PrintEducationSection({ education }: { education: readonly Educa
         {sorted.map((entry) => {
           const range = dateRange(entry);
           return (
-            <li key={entry.id} className="break-inside-avoid list-none text-xs text-neutral-800">
+            <li
+              key={entry.id}
+              className="break-inside-avoid list-none text-xs text-print-foreground"
+            >
               <span className="font-semibold">{entry.credential}</span>
               <span> — {entry.institution}</span>
-              {entry.field ? <span className="text-neutral-700"> · {entry.field}</span> : null}
-              {range ? <span className="text-neutral-700"> · {range}</span> : null}
+              {entry.field ? (
+                <span className="text-print-muted-foreground"> · {entry.field}</span>
+              ) : null}
+              {range ? <span className="text-print-muted-foreground"> · {range}</span> : null}
             </li>
           );
         })}

@@ -16,31 +16,27 @@ export function PositionCard({
     <li className="list-none">
       <Link
         href={`/position/${position.id}`}
-        className="block rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 dark:focus-visible:ring-neutral-100"
+        className="block rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <article
-          className={`group rounded-md border-l-4 bg-white py-4 pl-5 pr-4 transition-colors hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800 ${style.border}`}
+          className={`group rounded-md border-l-4 bg-card py-4 pl-5 pr-4 transition-colors hover:bg-muted ${style.border}`}
           data-track-id={career.id}
         >
           <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
             <div>
-              <h2 className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+              <h2 className="font-headings text-lg font-semibold tracking-tight text-foreground">
                 {position.title}
               </h2>
-              <p className="text-sm text-neutral-700 dark:text-neutral-300">
-                {position.employer.name}
-              </p>
+              <p className="text-sm text-muted-foreground">{position.employer.name}</p>
             </div>
             <TrackBadge career={career} />
           </header>
-          <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
             <time dateTime={position.startDate}>
               {formatMonthRange(position.startDate, position.endDate)}
             </time>
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
-            {position.summary}
-          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{position.summary}</p>
         </article>
       </Link>
     </li>

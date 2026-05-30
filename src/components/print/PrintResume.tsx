@@ -20,18 +20,18 @@ export function PrintResume({
 }) {
   const sorted = sortPositionsForTimeline(positions);
   return (
-    <article className="print-resume mx-auto max-w-[8.5in] space-y-5 px-6 py-8 text-neutral-900">
+    <article className="print-resume mx-auto max-w-[8.5in] space-y-5 px-6 py-8 text-print-foreground">
       <PrintHeader site={site} variantLabel={variantLabel} />
 
       <section aria-labelledby="print-experience-heading" className="space-y-4">
         <h2
           id="print-experience-heading"
-          className="break-after-avoid text-sm font-semibold uppercase tracking-wider text-neutral-900"
+          className="font-headings break-after-avoid text-sm font-semibold uppercase tracking-wider text-print-foreground"
         >
           Experience
         </h2>
         {sorted.length === 0 ? (
-          <p className="text-xs text-neutral-700">No experience entries yet.</p>
+          <p className="text-xs text-print-muted-foreground">No experience entries yet.</p>
         ) : (
           sorted.map((position) => <PrintPositionBlock key={position.id} position={position} />)
         )}

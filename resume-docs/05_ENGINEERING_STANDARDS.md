@@ -97,12 +97,23 @@ resume-site/
 - **Formatter**: Prettier with project default config (no overrides unless
   justified in an ADR).
 - **Linter**: ESLint with `next/core-web-vitals` and `@typescript-eslint`
-  strict-type-checked rules.
+  strict-type-checked rules, plus the theming contract rule below.
 - **Max function length**: aim for < 50 lines; extract helpers in `lib/`.
 - **No `any`** — use `unknown` and narrow, or define a Zod schema.
 - **Prefer composition over inheritance** for components.
 - **No default exports for components** (named exports only) — exception is
   required for Next.js route files.
+- **Theming contract (FEAT-012).** Components MUST reference semantic
+  tokens (`bg-background`, `text-foreground`, `bg-card`, `bg-muted`,
+  `bg-accent`, `border-border`, `bg-track-N`, etc.) defined in
+  `src/styles/theme.css`. Raw Tailwind color utilities (`bg-white`,
+  `text-neutral-700`, `border-amber-200`, …) and `dark:` variants are
+  **forbidden** in `src/components/**` and `src/app/**`. Enforced by
+  a `no-restricted-syntax` rule in `eslint.config.mjs` ([FEAT-012 §10](features/theming.md)
+  / [ADR-0005 §Compliance](adr/ADR-0005-semantic-token-theming.md)).
+  Print components are exempt via path-based ESLint override —
+  they use the `print-*` token namespace, which intentionally does
+  not respond to system theme.
 
 ## 5. Error handling
 

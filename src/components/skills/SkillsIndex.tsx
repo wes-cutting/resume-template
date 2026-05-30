@@ -22,7 +22,7 @@ export function SkillsIndex({
     return (
       <p
         role="status"
-        className="rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400"
+        className="rounded-md border border-dashed border-input bg-card px-4 py-6 text-center text-sm text-muted-foreground"
       >
         No skills yet.
       </p>
@@ -34,24 +34,22 @@ export function SkillsIndex({
         <section key={group.category} aria-labelledby={`cat-${group.category}`}>
           <h2
             id={`cat-${group.category}`}
-            className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
+            className="font-headings text-sm font-medium uppercase tracking-wide text-muted-foreground"
           >
             {group.category}
           </h2>
-          <ul className="mt-2 divide-y divide-neutral-100 border-y border-neutral-100 dark:divide-neutral-800 dark:border-neutral-800">
+          <ul className="mt-2 divide-y divide-border border-y border-border">
             {group.skills.map((skill) => (
               <li key={skill.id} className="list-none">
                 <Link
                   href={`/skills/${skill.id}`}
-                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-1 py-2 hover:bg-neutral-50 dark:hover:bg-neutral-900"
+                  className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-1 py-2 hover:bg-card"
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
-                      {skill.name}
-                    </span>
+                    <span className="text-sm font-medium text-foreground">{skill.name}</span>
                     <ProficiencyDots value={skill.proficiency} />
                   </span>
-                  <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                  <span className="text-xs text-muted-foreground">
                     {countLine(skillUsage[skill.id])}
                   </span>
                 </Link>

@@ -14,9 +14,7 @@ export function ProficiencyDots({ value }: { value: number | undefined }) {
           key={i}
           aria-hidden="true"
           className={`inline-block h-1.5 w-1.5 rounded-full ${
-            i < clamped
-              ? "bg-neutral-700 dark:bg-neutral-300"
-              : "bg-neutral-200 dark:bg-neutral-700"
+            i < clamped ? "bg-foreground" : "bg-input"
           }`}
         />
       ))}

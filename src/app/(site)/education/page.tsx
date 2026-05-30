@@ -22,10 +22,10 @@ export default function EducationPage() {
       <SiteHeader site={site} activeNav="education" />
       <main className="mx-auto max-w-3xl px-6 py-10">
         <section className="mb-8">
-          <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-            Credentials
-          </p>
-          <h1 className="text-2xl font-semibold tracking-tight">Education</h1>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">Credentials</p>
+          <h1 className="font-headings text-2xl font-semibold tracking-tight text-foreground">
+            Education
+          </h1>
         </section>
         <EducationList entries={education} />
       </main>

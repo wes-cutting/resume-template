@@ -1,13 +1,23 @@
 # Feature Spec — Dark Mode (auto-only, v1)
 
-| Field            | Value                                                |
-| ---------------- | ---------------------------------------------------- |
-| Feature ID       | FEAT-010                                             |
-| Status           | Shipped                                              |
-| Owner            | Site owner                                           |
-| Last updated     | 2026-05-29 (post-ship: §11 palette resolved)         |
-| Related PRD goal | Match visitor system preferences; modern visual feel |
-| Related ADRs     | —                                                    |
+| Field            | Value                                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Feature ID       | FEAT-010                                                                                                           |
+| Status           | Superseded by [FEAT-012](./theming.md) (pending sign-off on [ADR-0005](../adr/ADR-0005-semantic-token-theming.md)) |
+| Owner            | Site owner                                                                                                         |
+| Last updated     | 2026-05-30 (marked Superseded; spec text retained intact for historical context)                                   |
+| Related PRD goal | Match visitor system preferences; modern visual feel                                                               |
+| Related ADRs     | [ADR-0005](../adr/ADR-0005-semantic-token-theming.md) (proposed; supersedes this spec)                             |
+
+> **Note (2026-05-30):** the auto-mode dark capability described in this
+> spec **is preserved unchanged** from the visitor's perspective. What
+> moves is the _source_ of the rules — from `dark:` Tailwind variants
+> scattered across ~30 components to a single `src/styles/theme.css`
+> token file (see [FEAT-012](./theming.md)). This spec is retained as
+> historical documentation of the A7 implementation and as the source
+> of the palette decisions that the FEAT-012 default theme will reuse.
+> The §12 palette quick-reference below is still the canonical mapping
+> that FEAT-012 §8 ports into semantic-token form.
 
 ## 1. Summary
 

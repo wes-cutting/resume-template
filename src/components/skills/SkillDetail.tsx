@@ -20,24 +20,24 @@ export function SkillDetail({
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">
           Skill · {skill.category}
         </p>
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          <h1 className="font-headings text-2xl font-semibold tracking-tight text-foreground">
             {skill.name}
           </h1>
           <ProficiencyDots value={skill.proficiency} />
         </div>
         {skill.description ? (
-          <p className="text-sm text-neutral-700 dark:text-neutral-300">{skill.description}</p>
+          <p className="text-sm text-muted-foreground">{skill.description}</p>
         ) : null}
       </header>
 
       {totalReferences === 0 ? (
         <p
           role="status"
-          className="rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-4 py-6 text-center text-sm text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400"
+          className="rounded-md border border-dashed border-input bg-card px-4 py-6 text-center text-sm text-muted-foreground"
         >
           This skill is configured but not yet referenced by any position, project, or event.
         </p>
@@ -47,7 +47,7 @@ export function SkillDetail({
         <section aria-labelledby="positions-heading">
           <h2
             id="positions-heading"
-            className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
+            className="text-sm font-medium uppercase tracking-wide text-muted-foreground"
           >
             Positions
           </h2>
@@ -58,20 +58,16 @@ export function SkillDetail({
                 <li key={position.id} className="list-none">
                   <Link
                     href={`/position/${position.id}`}
-                    className="block rounded-md border border-neutral-200 px-4 py-3 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+                    className="block rounded-md border border-border px-4 py-3 hover:bg-card"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <div>
-                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                          {position.title}
-                        </h3>
-                        <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                          {position.employer.name}
-                        </p>
+                        <h3 className="text-sm font-semibold text-foreground">{position.title}</h3>
+                        <p className="text-xs text-muted-foreground">{position.employer.name}</p>
                       </div>
                       {career ? <TrackBadge career={career} /> : null}
                     </div>
-                    <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+                    <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
                       <time dateTime={position.startDate}>
                         {formatMonthRange(position.startDate, position.endDate)}
                       </time>
@@ -88,7 +84,7 @@ export function SkillDetail({
         <section aria-labelledby="projects-heading">
           <h2
             id="projects-heading"
-            className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
+            className="text-sm font-medium uppercase tracking-wide text-muted-foreground"
           >
             Projects
           </h2>
@@ -99,14 +95,12 @@ export function SkillDetail({
                 <li key={project.id} className="list-none">
                   <Link
                     href={`/project/${project.id}`}
-                    className="block rounded-md border border-neutral-200 px-4 py-3 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+                    className="block rounded-md border border-border px-4 py-3 hover:bg-card"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <div>
-                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                          {project.name}
-                        </h3>
-                        <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                        <h3 className="text-sm font-semibold text-foreground">{project.name}</h3>
+                        <p className="text-xs text-muted-foreground">
                           at {project.position.title}
                           {project.confidential ? "" : ` · ${project.position.employer.name}`}
                         </p>
@@ -125,7 +119,7 @@ export function SkillDetail({
         <section aria-labelledby="events-heading">
           <h2
             id="events-heading"
-            className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
+            className="text-sm font-medium uppercase tracking-wide text-muted-foreground"
           >
             Events
           </h2>
@@ -136,14 +130,12 @@ export function SkillDetail({
                 <li key={event.id} className="list-none">
                   <Link
                     href={`/event/${event.id}`}
-                    className="block rounded-md border border-neutral-200 px-4 py-3 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:bg-neutral-900"
+                    className="block rounded-md border border-border px-4 py-3 hover:bg-card"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <div>
-                        <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                          {event.name}
-                        </h3>
-                        <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                        <h3 className="text-sm font-semibold text-foreground">{event.name}</h3>
+                        <p className="text-xs text-muted-foreground">
                           <time dateTime={event.date}>{event.date}</time> · {event.role}
                         </p>
                       </div>
