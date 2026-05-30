@@ -3,7 +3,7 @@
 | Field        | Value      |
 | ------------ | ---------- |
 | Status       | Active     |
-| Last updated | 2026-05-27 |
+| Last updated | 2026-05-29 |
 
 ## 1. Overview
 
@@ -217,6 +217,23 @@ A flat list of educational credentials.
 | startDate   | date (YYYY-MM) | no       |                           |                    |
 | endDate     | date (YYYY-MM) | no       |                           |                    |
 | highlights  | string[]       | no       | Notable achievements      | each ≤ 200 chars   |
+
+### Now
+
+A single record describing the owner's current focus — the [`/now` page][now-convention]
+convention. Stored in `content/now.json` as one object (not an array).
+
+| Attribute   | Type              | Required | Description                                                                        | Constraints      |
+| ----------- | ----------------- | -------- | ---------------------------------------------------------------------------------- | ---------------- |
+| lastUpdated | date (YYYY-MM-DD) | yes      | When the Now content was last touched. Future-dated values emit a build warning.   | valid day date   |
+| body        | string            | yes      | Free-form prose describing current work / learning / priorities. Plain text in v1. | 1–2000 chars     |
+| bullets     | string[]          | no       | Optional short list rendered after `body`                                          | each 1–200 chars |
+
+**Relationships**: none. Flat, standalone entity.
+
+**Invariants**: exactly one Now record per site. No cross-references.
+
+[now-convention]: https://nownownow.com/about
 
 ## 4. Shared value objects & enums
 

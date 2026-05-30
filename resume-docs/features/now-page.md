@@ -3,9 +3,9 @@
 | Field            | Value                                                              |
 | ---------------- | ------------------------------------------------------------------ |
 | Feature ID       | FEAT-009                                                           |
-| Status           | Approved                                                           |
+| Status           | Shipped                                                            |
 | Owner            | Site owner                                                         |
-| Last updated     | 2026-05-29                                                         |
+| Last updated     | 2026-05-29 (post-ship: §11 open question resolved, see below)      |
 | Related PRD goal | Signal that the site is maintained; give a fresh hook for visitors |
 | Related ADRs     | —                                                                  |
 
@@ -25,8 +25,10 @@ non-resume hook into the owner's current focus.
   - One static route at `/now`.
   - Content sourced from a new file under `/content/`.
   - Shows the "last updated" date prominently at the top.
-  - Linked from the site footer (FEAT-007). Optional second link from
-    primary nav — see §11.
+  - Surfaced from both the site footer (FEAT-007) **and** the primary
+    nav (between `Education` and `Contact`). The §11 open question
+    that originally proposed footer-only has been resolved in favor of
+    primary-nav inclusion — see §11.
 - **Out of scope**
   - History / archive of past Now states.
   - RSS feed of Now changes.
@@ -95,8 +97,16 @@ semantics).
 ## 7. Interface changes
 
 - `JoinedContent` gains `now: Now`.
-- New route: `src/app/now/page.tsx`.
+- New route: `src/app/(site)/now/page.tsx`.
 - New component: `src/components/now/NowPanel.tsx`.
+- `PrimaryNav` (`src/components/shared/PrimaryNav.tsx`) gains a fifth
+  `Now` pill between `Education` and `Contact`; the `PrimaryNavId`
+  union widens automatically. The `/now` route passes
+  `activeNav="now"` so the matching pill receives
+  `aria-current="page"`.
+- `SiteFooter` (FEAT-007) also renders a `Now` link — the primary nav
+  is the discoverable surface, the footer link is the conventional
+  one (per the `/now` page convention's "linked from footer" tradition).
 
 ## 8. Dependencies
 
@@ -123,6 +133,12 @@ N/A.
   trivial. — proposed: Markdown via a minimal renderer (e.g.
   `marked` or `micromark`), but only if the value is worth the dep. Default
   to plain text in v1; revisit if the owner asks.
-- **Should `/now` be in the primary nav?** Most "/now" sites are linked
+- **Should `/now` be in the primary nav?** ~~Most "/now" sites are linked
   only from the footer to keep the page slightly hidden — discovering it
-  feels like a small reward. Proposed: footer-only in v1. — assumed.
+  feels like a small reward. Proposed: footer-only in v1.~~ —
+  **Resolved (2026-05-29, post-ship)**: surfaced in the primary nav too,
+  between `Education` and `Contact`. The discoverability win outweighs
+  the "small reward" framing for this site. The footer link is retained
+  so the conventional `/now` discoverability still works for visitors
+  who scroll. The five-pill primary nav order is now:
+  `Skills · Education · Now · Contact · Print`.

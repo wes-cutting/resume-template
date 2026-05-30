@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   EmployerSchema,
   EventSchema,
+  NowSchema,
   PositionSchema,
   ProjectSchema,
   SiteSchema,
@@ -197,5 +198,43 @@ describe("EventSchema, EmployerSchema, SkillSchema", () => {
     expect(
       SkillSchema.safeParse({ id: "s", name: "S", category: "c", proficiency: 3 }).success,
     ).toBe(true);
+  });
+});
+
+describe("NowSchema (FEAT-009)", () => {
+  const valid = { lastUpdated: "2026-05-29", body: "Working on the resume site." };
+
+  it("accepts a minimal valid Now record", () => {
+    expect(NowSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it("accepts optional bullets", () => {
+    const result = NowSchema.safeParse({ ...valid, bullets: ["a", "b"] });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an empty body", () => {
+    expect(NowSchema.safeParse({ ...valid, body: "" }).success).toBe(false);
+  });
+
+  it("rejects a body longer than 2000 chars", () => {
+    expect(NowSchema.safeParse({ ...valid, body: "x".repeat(2001) }).success).toBe(false);
+  });
+
+  it("rejects a bullet longer than 200 chars", () => {
+    expect(NowSchema.safeParse({ ...valid, bullets: ["x".repeat(201)] }).success).toBe(false);
+  });
+
+  it("rejects a lastUpdated that isn't YYYY-MM-DD", () => {
+    expect(NowSchema.safeParse({ ...valid, lastUpdated: "2026-05" }).success).toBe(false);
+    expect(NowSchema.safeParse({ ...valid, lastUpdated: "not-a-date" }).success).toBe(false);
+  });
+
+  it("accepts a future-dated lastUpdated at the schema layer (loader handles warning)", () => {
+    expect(NowSchema.safeParse({ ...valid, lastUpdated: "2999-01-01" }).success).toBe(true);
+  });
+
+  it("rejects unknown fields (strict)", () => {
+    expect(NowSchema.safeParse({ ...valid, extra: 1 }).success).toBe(false);
   });
 });

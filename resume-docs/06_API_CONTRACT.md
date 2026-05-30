@@ -3,7 +3,7 @@
 | Field                   | Value                                                 |
 | ----------------------- | ----------------------------------------------------- |
 | Status                  | Active                                                |
-| Last updated            | 2026-05-27                                            |
+| Last updated            | 2026-05-29                                            |
 | Machine-readable schema | `content-schema.json` (JSON Schema for content files) |
 
 The site exposes no public HTTP API. This document defines the **internal data
@@ -15,10 +15,11 @@ document.
 ## 1. Conventions
 
 - Content lives in `/content/*.json`.
-- Each file holds an array (or a single object for `site.json`).
+- Each file holds an array (with two exceptions that hold a single object:
+  `site.json` and `now.json`).
 - Ids are kebab-case, unique within their entity type, and immutable.
 - Dates: `YYYY-MM` for month precision (`startDate`, `endDate` on positions and
-  education), `YYYY-MM-DD` for day precision (events).
+  education), `YYYY-MM-DD` for day precision (events; `now.lastUpdated`).
 - URLs must use `https://`.
 
 ## 2. Loader contract
@@ -48,6 +49,7 @@ type JoinedContent = {
     }
   >;
   education: Education[];
+  now: Now; // flat, no cross-references
 };
 ```
 

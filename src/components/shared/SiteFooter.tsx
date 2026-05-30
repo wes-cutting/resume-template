@@ -27,6 +27,9 @@ export function SiteFooter({ site }: { site: Site }) {
           <span>
             Updated <time dateTime={updated}>{updated}</time>
           </span>
+          <Link href="/now" className="underline-offset-2 hover:underline">
+            Now
+          </Link>
           {site.repoUrl ? (
             <Link
               href={site.repoUrl}

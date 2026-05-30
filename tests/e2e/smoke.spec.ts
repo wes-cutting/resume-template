@@ -11,6 +11,7 @@ const routes = [
   { path: "/event/harborlights-festival-2024", h1: /Harborlights/ },
   { path: "/education", h1: /^Education$/ },
   { path: "/contact", h1: /^Contact$/ },
+  { path: "/now", h1: /^Now$/ },
   // Print routes share an owner-name h1; the variant label is checked via body text below.
   { path: "/print", h1: /Alex Rivera/, body: /Experience/ },
   { path: "/print/software", h1: /Alex Rivera/, body: /Software Engineering/ },
@@ -79,13 +80,14 @@ test("can navigate timeline → position → skill → back", async ({ page }) =
 });
 
 test.describe("primary nav", () => {
-  test("home exposes Skills / Education / Contact / Print pills that navigate correctly", async ({
+  test("home exposes Skills / Education / Now / Contact / Print pills that navigate correctly", async ({
     page,
   }) => {
     await page.goto("/");
     const nav = page.getByRole("navigation", { name: "Primary pages" });
     await expect(nav.getByRole("link", { name: "Skills" })).toBeVisible();
     await expect(nav.getByRole("link", { name: "Education" })).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Now", exact: true })).toBeVisible();
     await expect(nav.getByRole("link", { name: "Contact" })).toBeVisible();
     await expect(nav.getByRole("link", { name: "Print" })).toBeVisible();
 
@@ -94,6 +96,9 @@ test.describe("primary nav", () => {
     await page.goBack();
     await nav.getByRole("link", { name: "Education" }).click();
     await expect(page).toHaveURL(/\/education\/?$/);
+    await page.goBack();
+    await nav.getByRole("link", { name: "Now", exact: true }).click();
+    await expect(page).toHaveURL(/\/now\/?$/);
     await page.goBack();
     await nav.getByRole("link", { name: "Contact" }).click();
     await expect(page).toHaveURL(/\/contact\/?$/);
@@ -136,12 +141,49 @@ test.describe("primary nav", () => {
     for (const path of ["/", "/career/software", "/career/events"]) {
       await page.goto(path);
       const nav = page.getByRole("navigation", { name: "Primary pages" });
-      for (const label of ["Skills", "Education", "Contact", "Print"]) {
-        await expect(nav.getByRole("link", { name: label })).not.toHaveAttribute(
+      for (const label of ["Skills", "Education", "Now", "Contact", "Print"]) {
+        await expect(nav.getByRole("link", { name: label, exact: true })).not.toHaveAttribute(
           "aria-current",
           "page",
         );
       }
+    }
+  });
+});
+
+test.describe("now page (FEAT-009)", () => {
+  test("renders a single machine-readable <time> with the lastUpdated value (US-3)", async ({
+    page,
+  }) => {
+    await page.goto("/now");
+    const times = page.locator("main time");
+    await expect(times).toHaveCount(1);
+    await expect(times.first()).toHaveAttribute("datetime", /^\d{4}-\d{2}-\d{2}$/);
+  });
+
+  test("is reachable from the footer Now link on a non-now route", async ({ page }) => {
+    await page.goto("/");
+    const footerLink = page.locator("footer").getByRole("link", { name: "Now" });
+    // Static export may append a trailing slash to the href.
+    await expect(footerLink).toHaveAttribute("href", /^\/now\/?$/);
+    await footerLink.click();
+    await expect(page).toHaveURL(/\/now\/?$/);
+  });
+
+  test("marks the Now primary-nav pill as active (§11 — promoted into the nav)", async ({
+    page,
+  }) => {
+    await page.goto("/now");
+    const nav = page.getByRole("navigation", { name: "Primary pages" });
+    await expect(nav.getByRole("link", { name: "Now", exact: true })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    for (const label of ["Skills", "Education", "Contact", "Print"]) {
+      await expect(nav.getByRole("link", { name: label, exact: true })).not.toHaveAttribute(
+        "aria-current",
+        "page",
+      );
     }
   });
 });
@@ -201,6 +243,7 @@ test.describe("career switcher placement", () => {
       "/skills",
       "/skills/typescript",
       "/education",
+      "/now",
       "/position/aurora-senior-engineer",
       "/project/ingest-rewrite",
       "/event/harborlights-festival-2024",

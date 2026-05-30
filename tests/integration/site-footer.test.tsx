@@ -46,4 +46,10 @@ describe("SiteFooter", () => {
     const { container } = render(<SiteFooter site={baseSite} />);
     expect(container.querySelector("footer")).toHaveAttribute("data-print", "hide");
   });
+
+  it("renders a link to /now (FEAT-009 §11 — footer-only surface)", () => {
+    render(<SiteFooter site={baseSite} />);
+    const link = screen.getByRole("link", { name: "Now" });
+    expect(link).toHaveAttribute("href", "/now");
+  });
 });

@@ -3,7 +3,7 @@
 | Field        | Value      |
 | ------------ | ---------- |
 | Status       | Active     |
-| Last updated | 2026-05-27 |
+| Last updated | 2026-05-29 |
 
 ## 1. Languages & versions
 
@@ -25,20 +25,28 @@ resume-site/
     events.json
     skills.json
     education.json
+    now.json               # Single object (FEAT-009)
   public/                  # Static assets (favicon, images)
   src/
     app/                   # Next.js App Router routes
-      page.tsx             # Unified timeline (FEAT-001)
-      career/[careerId]/   # Split timelines (FEAT-002)
-      skills/              # Skills index + [skillId] detail (FEAT-003)
-      education/           # Education page (FEAT-004)
-      print/               # Print routes (FEAT-005)
+      (site)/              # Route group — non-print routes (SiteHeader + SiteFooter)
+        page.tsx             # Unified timeline (FEAT-001)
+        career/[careerId]/   # Split timelines (FEAT-002)
+        skills/              # Skills index + [skillId] detail (FEAT-003)
+        education/           # Education page (FEAT-004)
+        position/[id]/       # Position detail (FEAT-006)
+        project/[id]/        # Project detail (FEAT-006)
+        event/[id]/          # Event detail (FEAT-006)
+        contact/             # Contact page (FEAT-008)
+        now/                 # Now page (FEAT-009)
+      print/               # Print routes (FEAT-005) — outside the (site) group
         page.tsx                 # /print (unified)
-        software/page.tsx
-        events/page.tsx
-      position/[id]/       # Position detail (FEAT-006)
-      project/[id]/        # Project detail (FEAT-006)
-      event/[id]/          # Event detail (FEAT-006)
+        [variant]/page.tsx       # /print/software, /print/events
+      sitemap.ts           # FEAT-007
+      robots.ts            # FEAT-007
+      manifest.ts          # FEAT-007
+      icon.tsx / apple-icon.tsx / opengraph-image.tsx  # FEAT-007
+      not-found.tsx        # Custom 404 (FEAT-007)
     content/               # Content loader, schemas, types
       schemas.ts           # Zod schemas
       load.ts              # Read + validate + join
@@ -47,7 +55,11 @@ resume-site/
       timeline/
       skill/
       print/
-      shared/
+      shared/              # SiteHeader, SiteFooter, PrimaryNav, etc.
+      contact/             # FEAT-008
+      now/                 # FEAT-009
+      education/
+      detail/
     styles/
       globals.css
       print.css
@@ -56,7 +68,7 @@ resume-site/
     unit/
     integration/
     e2e/
-  docs/                    # The documents this project ships with
+  resume-docs/             # The documents this project ships with
     01_PRD.md
     ...
 ```

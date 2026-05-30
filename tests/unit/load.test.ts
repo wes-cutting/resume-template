@@ -13,6 +13,7 @@ type ContentFiles = {
   events?: unknown;
   skills?: unknown;
   education?: unknown;
+  now?: unknown;
 };
 
 const VALID: Required<ContentFiles> = {
@@ -66,6 +67,7 @@ const VALID: Required<ContentFiles> = {
   ],
   skills: [{ id: "ts", name: "TypeScript", category: "language" }],
   education: [{ id: "edu1", institution: "U", credential: "BS" }],
+  now: { lastUpdated: "2024-01-15", body: "Doing things." },
 };
 
 function writeFixture(files: ContentFiles): string {
@@ -78,6 +80,7 @@ function writeFixture(files: ContentFiles): string {
   writeFileSync(join(dir, "events.json"), JSON.stringify(all.events));
   writeFileSync(join(dir, "skills.json"), JSON.stringify(all.skills));
   writeFileSync(join(dir, "education.json"), JSON.stringify(all.education));
+  writeFileSync(join(dir, "now.json"), JSON.stringify(all.now));
   return dir;
 }
 
@@ -287,5 +290,73 @@ describe("loadContent — unreferenced skills warning (FEAT-003 US-2)", () => {
     } finally {
       warn.mockRestore();
     }
+  });
+});
+
+describe("loadContent — now.json (FEAT-009)", () => {
+  it("loads the Now record and exposes it on JoinedContent", () => {
+    const content = loadContent({
+      contentDir: fixture({
+        now: {
+          lastUpdated: "2025-03-04",
+          body: "Working on the resume site.",
+          bullets: ["Bullet one"],
+        },
+      }),
+      cache: false,
+    });
+    expect(content.now.lastUpdated).toBe("2025-03-04");
+    expect(content.now.body).toBe("Working on the resume site.");
+    expect(content.now.bullets).toEqual(["Bullet one"]);
+  });
+
+  it("emits a console.warn (not an error) when lastUpdated is in the future", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      loadContent({
+        contentDir: fixture({
+          now: { lastUpdated: "2999-01-01", body: "Future-dated." },
+        }),
+        cache: false,
+      });
+      const messages = warn.mock.calls.map((c) => String(c[0]));
+      expect(messages.some((m) => /now\.json:lastUpdated.*future/.test(m))).toBe(true);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("does not warn when lastUpdated is today or in the past", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      loadContent({
+        contentDir: fixture({
+          now: { lastUpdated: "2020-01-01", body: "Old." },
+        }),
+        cache: false,
+      });
+      const messages = warn.mock.calls.map((c) => String(c[0]));
+      expect(messages.some((m) => /now\.json:lastUpdated.*future/.test(m))).toBe(false);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("fails the build when now.json is missing", () => {
+    // Build a fixture that includes everything BUT now.json by deleting after writeFixture.
+    const dir = fixture();
+    rmSync(join(dir, "now.json"));
+    expect(() => loadContent({ contentDir: dir, cache: false })).toThrow(/now\.json/);
+  });
+
+  it("fails the build with the [content] file:path — message format when now.json is malformed", () => {
+    expect(() =>
+      loadContent({
+        contentDir: fixture({
+          now: { lastUpdated: "not-a-date", body: "x" },
+        }),
+        cache: false,
+      }),
+    ).toThrow(/^\[content\] now\.json:lastUpdated — /m);
   });
 });

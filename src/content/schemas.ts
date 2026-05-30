@@ -136,6 +136,14 @@ export const EducationSchema = z
   })
   .strict();
 
+export const NowSchema = z
+  .object({
+    lastUpdated: dayDate,
+    body: z.string().min(1).max(2000),
+    bullets: z.array(z.string().min(1).max(200)).optional(),
+  })
+  .strict();
+
 export const EmployersFileSchema = z.array(EmployerSchema);
 export const PositionsFileSchema = z.array(PositionSchema);
 export const ProjectsFileSchema = z.array(ProjectSchema);

@@ -3,6 +3,7 @@ import type {
   EducationSchema,
   EmployerSchema,
   EventSchema,
+  NowSchema,
   PositionSchema,
   ProjectSchema,
   SiteCareerSchema,
@@ -18,6 +19,7 @@ export type Project = z.infer<typeof ProjectSchema>;
 export type Event = z.infer<typeof EventSchema>;
 export type Skill = z.infer<typeof SkillSchema>;
 export type Education = z.infer<typeof EducationSchema>;
+export type Now = z.infer<typeof NowSchema>;
 
 export type PositionJoined = Position & {
   employer: Employer;
@@ -51,4 +53,5 @@ export type JoinedContent = {
   skills: Skill[];
   skillUsage: Record<string, SkillUsage>;
   education: Education[];
+  now: Now;
 };

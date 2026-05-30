@@ -208,6 +208,28 @@
           "items": { "type": "string", "minLength": 1, "maxLength": 200 }
         }
       }
+    },
+    "Now": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lastUpdated", "body"],
+      "properties": {
+        "lastUpdated": {
+          "$ref": "#/$defs/dayDate",
+          "description": "When the Now content was last touched. Future-dated values emit a build warning but still render."
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "description": "Free-form prose describing current focus. Plain text in v1."
+        },
+        "bullets": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "description": "Optional short list rendered after the body."
+        }
+      }
     }
   },
   "properties": {
@@ -217,7 +239,8 @@
     "projects": { "type": "array", "items": { "$ref": "#/$defs/Project" } },
     "events": { "type": "array", "items": { "$ref": "#/$defs/Event" } },
     "skills": { "type": "array", "items": { "$ref": "#/$defs/Skill" } },
-    "education": { "type": "array", "items": { "$ref": "#/$defs/Education" } }
+    "education": { "type": "array", "items": { "$ref": "#/$defs/Education" } },
+    "now": { "$ref": "#/$defs/Now" }
   },
   "additionalProperties": false
 }

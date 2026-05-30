@@ -7,6 +7,7 @@ import {
   EducationFileSchema,
   EmployersFileSchema,
   EventsFileSchema,
+  NowSchema,
   PositionsFileSchema,
   ProjectsFileSchema,
   SiteSchema,
@@ -18,6 +19,7 @@ import type {
   Event,
   EventJoined,
   JoinedContent,
+  Now,
   Position,
   PositionJoined,
   Project,
@@ -34,6 +36,7 @@ const CONTENT_FILES = {
   events: "events.json",
   skills: "skills.json",
   education: "education.json",
+  now: "now.json",
 } as const;
 
 const cache = new Map<string, JoinedContent>();
@@ -56,6 +59,7 @@ export function loadContent(opts?: { contentDir?: string; cache?: boolean }): Jo
   const events = parseFile(contentDir, CONTENT_FILES.events, EventsFileSchema, errors);
   const skills = parseFile(contentDir, CONTENT_FILES.skills, SkillsFileSchema, errors);
   const education = parseFile(contentDir, CONTENT_FILES.education, EducationFileSchema, errors);
+  const now = parseFile(contentDir, CONTENT_FILES.now, NowSchema, errors);
 
   if (errors.length > 0) throw new Error(errors.join("\n"));
 
@@ -66,6 +70,7 @@ export function loadContent(opts?: { contentDir?: string; cache?: boolean }): Jo
   const validatedEvents = events as Event[];
   const validatedSkills = skills as Skill[];
   const validatedEducation = education as Education[];
+  const validatedNow = now as Now;
 
   checkUniqueIds(CONTENT_FILES.employers, validatedEmployers, errors);
   checkUniqueIds(CONTENT_FILES.positions, validatedPositions, errors);
@@ -223,12 +228,21 @@ export function loadContent(opts?: { contentDir?: string; cache?: boolean }): Jo
     skills: validatedSkills,
     skillUsage,
     education: validatedEducation,
+    now: validatedNow,
   };
 
   const unused = unreferencedSkillIds(skillUsage);
   if (unused.length > 0) {
     console.warn(
       `[content] skills.json — ${unused.length} skill(s) not referenced by any position, project, or event: ${unused.join(", ")}`,
+    );
+  }
+
+  // FEAT-009 §5 — future-dated lastUpdated is a warning, not an error.
+  const todayYmd = new Date().toISOString().slice(0, 10);
+  if (validatedNow.lastUpdated > todayYmd) {
+    console.warn(
+      `[content] now.json:lastUpdated — value '${validatedNow.lastUpdated}' is in the future (today is ${todayYmd})`,
     );
   }
 
