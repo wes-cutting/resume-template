@@ -1,0 +1,172 @@
+# Definition of Done — Report (2026-05-30)
+
+| Field        | Value                                                                                                                                                                                                       |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Status       | Snapshot                                                                                                                                                                                                    |
+| Date         | 2026-05-30                                                                                                                                                                                                  |
+| Scope        | Delta since [dod-report-2026-05-29.md](./dod-report-2026-05-29.md) (A6 + A7 work)                                                                                                                           |
+| Build target | Roadmap **A6** (FEAT-009 Now page + same-day primary-nav promotion); roadmap **A7** (FEAT-010 dark mode auto-only). Phase A is now feature-complete from the builder side; only owner-blocked items remain. |
+
+A delta snapshot covering two more Phase A items shipped since the prior pass.
+Like its predecessors, this file is a one-time snapshot and is not maintained
+over time — future DoD passes add a new `dod-report-YYYY-MM-DD.md` rather
+than editing this one.
+
+## 1. Delta since 2026-05-29
+
+Items that landed between the prior pass and this one, in order:
+
+| Item                                                        | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Source                                                                                                                                                                                                                    |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A6** — Now page (FEAT-009)                                | New `/now` route under the `(site)/` route group. New `Now` entity (additive — `lastUpdated`, `body`, optional `bullets[]`) reconciled across [schemas.ts](../../src/content/schemas.ts), [content-schema.json](../content-schema.json), and [03_DOMAIN_MODEL.md](../03_DOMAIN_MODEL.md) in the same change. `content/now.json` seeded with placeholder content. `NowPanel` renders a single machine-readable `<time>` plus body paragraphs and an optional `Currently` bullet list. Loader emits a `console.warn` (not an error) when `lastUpdated` is in the future.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | [features/now-page.md](../features/now-page.md)                                                                                                                                                                           |
+| **Refinement (same day)** — `/now` promoted into PrimaryNav | FEAT-009 §11's open question "footer-only vs primary nav" resolved in favor of promotion. `PrimaryNav` extended to **five pills** (`Skills · Education · Now · Contact · Print`); `/now` passes `activeNav="now"` and the matching pill receives `aria-current="page"`. Footer link retained for `/now` page convention familiarity. FEAT-009 spec §2/§7/§11 updated, A6 Completed row gained a `**Refinement (same day):**` sub-note (mirroring the A2 pattern).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | [features/now-page.md §11](../features/now-page.md)                                                                                                                                                                       |
+| **Doc audit** — API contract + standards reconciled with A6 | Caught after a user nudge: `06_API_CONTRACT.md` §1 (single-object exceptions; day-precision dates) and §2 (`JoinedContent` type signature) didn't yet mention `now.json` / `now: Now`; `05_ENGINEERING_STANDARDS.md` §2 directory layout was stale from A4/A5/A6 drift. Both updated in a follow-up commit; "Last updated" bumped on both. Fixed an incidental stale `docs/` → `resume-docs/` reference in the standards layout.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | [06_API_CONTRACT.md](../06_API_CONTRACT.md), [05_ENGINEERING_STANDARDS.md](../05_ENGINEERING_STANDARDS.md)                                                                                                                |
+| **A7** — Dark mode auto-only (FEAT-010)                     | Auto-mode via `prefers-color-scheme`; **no toggle, no `localStorage`, no `'use client'` boundary** — preserves ADR-0004's zero-client-components property. `globals.css` gains the explicit `@custom-variant dark (@media (prefers-color-scheme: dark))`; root `<body>` gains `dark:bg-neutral-950 dark:text-neutral-100`. **`dark:` sweep across ~30 component/route files** covering shared, timeline, skills, education, detail, contact, now, plus `(site)/` page wrappers and `not-found.tsx`. `TrackBadge` gains a `chipDark` field threading dark track tints through `CareerSwitcher` too. **Print routes stay light always** via a new `src/app/print/layout.tsx` force-light shell (`bg-white text-neutral-900`, `data-testid="print-shell"`); print components carry no `dark:` variants; `print.css` `@media print { html, body { background-color: white !important; color: black !important; } }` defends the actual print. FEAT-010 §11 palette open-question resolved (deviating from the original "neutral-200 borders" assumption to `neutral-800` borders, which the spec explicitly flagged as adjustable). New §12 "Shipped palette quick-reference" mapping table added to the spec for future contributors. | [features/dark-mode.md](../features/dark-mode.md), [src/app/print/layout.tsx](../../src/app/print/layout.tsx), [src/styles/globals.css](../../src/styles/globals.css), [src/styles/print.css](../../src/styles/print.css) |
+| Schema additions                                            | One new entity (`Now`) added in A6. **All three sources reconciled in the same change** per [06_API_CONTRACT.md §4](../06_API_CONTRACT.md): Zod (`NowSchema` strict, `body` 1–2000 chars, optional `bullets[]` 1–200 each), JSON Schema (`Now` `$def` + root `now` property), Domain Model (new "Now" entity section).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | [03_DOMAIN_MODEL.md](../03_DOMAIN_MODEL.md), [content-schema.json](../content-schema.json), [src/content/schemas.ts](../../src/content/schemas.ts)                                                                        |
+| Loader: new file + future-date warning                      | `src/content/load.ts` reads `content/now.json` alongside the other entity files; emits a `console.warn` (not an error) when `lastUpdated` is in the future per FEAT-009 §5. `tests/unit/load.test.ts`'s shared fixture writer now seeds a `now.json` so existing tests don't regress.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | [src/content/load.ts](../../src/content/load.ts)                                                                                                                                                                          |
+| Roadmap reshuffle                                           | A6 and A7 moved from "Phase A — v1 launch scope" to the Completed table. Header "Last updated" bumped to `2026-05-29 (A4 + A5 + A6 + A7 complete)`. Phase A now contains only **A1** (paused per owner) and **A8** (blocked on A1).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | [roadmap.md](../roadmap.md)                                                                                                                                                                                               |
+
+## 2. Checklist (current state)
+
+Re-evaluating the Engineering Standards §13 checklist against the post-A7
+state:
+
+| Check                                                                        | State        | Evidence                                                                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Acceptance criteria from each feature spec met                               | ✅           | FEAT-001..008 built earlier passes; FEAT-009 (Now page) shipped in this delta with all four user stories covered; FEAT-010 (dark mode) shipped with US-1..US-3 covered by tests, US-4 (WCAG AA contrast) carried as a manual step — see §6 below.                                                                                                                                          |
+| Unit + integration tests cover new behavior; all pass                        | ✅           | **152 / 152 Vitest across 24 files** (was 129 / 23 at the prior DoD; +23 over the delta — 8 schema + 5 loader + 9 NowPanel integration + 1 SiteFooter assertion). No Vitest tests for dark mode because jsdom is not color-aware (FEAT-010 §9 spec).                                                                                                                                       |
+| Lint clean                                                                   | ✅           | `pnpm lint` — `eslint .` runs directly (per roadmap B2).                                                                                                                                                                                                                                                                                                                                   |
+| Typecheck clean                                                              | ✅           | `pnpm typecheck` — TypeScript strict + `noUncheckedIndexedAccess`.                                                                                                                                                                                                                                                                                                                         |
+| Prettier clean                                                               | ✅           | `pnpm format:check`.                                                                                                                                                                                                                                                                                                                                                                       |
+| Schema validation passes on `/content/`                                      | ✅           | `pnpm build` succeeds with the new `Now` entity in the graph; no `[content] <file>:<jsonPath> — <message>` errors; loader's future-date warning behaviour verified by loader tests.                                                                                                                                                                                                        |
+| Playwright smoke tests pass; new routes added to smoke list                  | ✅           | **48 / 48 Playwright** (was 37 at the prior DoD; +11 over the delta — 4 for FEAT-009, 7 for FEAT-010). `/now` added to the smoke route table; FEAT-009 + FEAT-010 each have a dedicated `describe` block. See §5.                                                                                                                                                                          |
+| Relevant docs updated in same change                                         | ✅           | Schema additions reconciled with code; FEAT-009 / FEAT-010 specs updated in the same change as their shipping commits; doc audit (06_API_CONTRACT + 05_ENGINEERING_STANDARDS) reconciled all stale references touched by A4–A6. Roadmap Completed table extended.                                                                                                                          |
+| Lighthouse ≥ targets ([ADR-0004](../adr/ADR-0004-accept-mobile-perf-gap.md)) | ✅ (carried) | Not re-run this pass — no perf-affecting changes shipped (dark mode is CSS-only; A6's NowPanel + route adds <1 kB of HTML and no JS). ADR-0004 floors presumed to still hold from the 2026-05-29 measurement. **Recommended next pass: re-run** after the next functional change to refresh the baseline.                                                                                  |
+| Manual print check                                                           | ✅ (carried) | Owner's 2026-05-28 print confirmation still holds. A6 didn't add a print variant (`/now` is non-print); A7 is explicitly print-safe (force-light shell + `!important` in print.css + Playwright assertion that `@media print` + `colorScheme: "dark"` still resolves body bg to white). **Recommended manual check before public launch** to confirm dark-mode visitors still print clean. |
+
+Every checklist item is green or a documented carry — same posture as the prior pass.
+
+## 3. Test totals
+
+| Surface                    | 2026-05-29 | 2026-05-30 | Δ       |
+| -------------------------- | ---------- | ---------- | ------- |
+| Vitest unit                | 67         | 80         | +13     |
+| Vitest integration (jsdom) | 62         | 72         | +10     |
+| **Vitest total**           | **129**    | **152**    | **+23** |
+| **Playwright e2e**         | **37**     | **48**     | **+11** |
+| Static export routes built | 41         | 43         | +2      |
+
+Run with `pnpm test` and `pnpm test:e2e`. Static route count is
+`find out -name index.html | wc -l` minus the 404 wrapper. The two new
+routes are `/now` (A6) and the `print/layout.tsx` (A7, technically a
+layout not a leaf route, but Next's per-route HTML emission counts it).
+
+## 4. Lighthouse results
+
+**Not re-run for this pass.** Justification:
+
+- **A6** added one route (`/now`) and one component (`NowPanel`). No new JS,
+  no new images, no new runtime dependencies. Marginal HTML/CSS-size impact
+  on bundle delivery.
+- **A7** is CSS-only — `dark:` utility classes increase the compiled CSS by a
+  small fraction. No JS impact (zero `'use client'` boundary). No new
+  images.
+
+The 2026-05-29 pass had every category hitting its ADR-0004 floor on every
+sampled route. Re-running this pass would consume ~10 minutes of CI time
+to (almost certainly) confirm the same numbers. **Recommendation**: re-run
+Lighthouse at the next functional change (e.g. when A1 lands real content
+and A8 adds the coursework route), and use those numbers as the next
+baseline.
+
+The ADR-0004 floors remain:
+
+| Category       | Floor (mobile / desktop) | Status                                                                       |
+| -------------- | ------------------------ | ---------------------------------------------------------------------------- |
+| Performance    | ≥ 75 / ≥ 90              | Presumed pass (no perf-affecting change)                                     |
+| Accessibility  | ≥ 95 / ≥ 95              | Presumed pass; **AA contrast in dark mode is the one manual carry** — see §6 |
+| Best Practices | ≥ 95 / ≥ 95              | Presumed pass                                                                |
+| SEO            | ≥ 95 / ≥ 95              | Presumed pass                                                                |
+
+## 5. Playwright route coverage (current)
+
+The smoke suite covers every static route emitted by `pnpm build`:
+
+- `/`, `/career/software`, `/career/events`
+- `/skills`, `/skills/typescript`
+- `/position/aurora-senior-engineer`, `/project/ingest-rewrite`, `/event/harborlights-festival-2024`
+- `/education`
+- `/contact`
+- **`/now`** (new in this delta)
+- `/print`, `/print/software`, `/print/events`
+- 404 for an unknown route
+- Print-media emulation on each print route + the print-only advisory on `/`
+- Timeline → position → skill → back navigation walk
+
+Dedicated `describe` blocks:
+
+- **Primary nav** — five-pill set (`Skills · Education · Now · Contact · Print`), `aria-current="page"` on active page, no active pill on home/career routes.
+- **Career switcher placement** — present on `/` and `/career/[id]`, absent on detail / skills / education / **`/now`** / contact routes.
+- **Now page (FEAT-009)** — single `<time>` on `/now`, footer link reachability, Now pill marked active.
+- **Contact page (FEAT-008)** — mailto, Book a call, social links.
+- **Site polish (FEAT-007)** — OG / Twitter Card meta, JSON-LD `Person`, favicon, footer presence/absence, custom 404, sitemap.xml + robots.txt.
+- **Dark mode (FEAT-010)** — body bg dark on `/`, `/career/software`, `/skills`, `/now` under `colorScheme: "dark"`; light mode regression check; `/print/software` force-light shell holds in dark mode; `@media print` + dark colorScheme still resolves body bg to white.
+
+## 6. Manual carries (not auto-tested)
+
+Two items intentionally left as manual:
+
+| Item                                             | Why manual                                                                                                                                                                                                                                                                                                                                                                                       | Owner action                                                                                                                                                 |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| WCAG AA contrast in dark mode (FEAT-010 §4 US-4) | jsdom isn't color-aware, and Playwright's contrast plugins are heavier than the value at this stage. Spec-aligned: FEAT-010 §9 explicitly calls this a manual once-over. The shipped palette follows the standard Tailwind inversion (neutral-100 text on neutral-950 base ≈ 19:1; neutral-300 text on neutral-950 ≈ 11:1), which is comfortably above the 4.5:1 body / 3:1 large-text AA floor. | DevTools contrast inspector pass on `/`, `/career/software`, `/skills`, `/education`, one detail page, `/now`, `/contact` in dark mode before public launch. |
+| Dark-mode print sanity                           | Spec-aligned: the auto-tested invariant ("force-light shell + `!important` in print.css") covers the mechanism, but a literal "Cmd-P in dark mode, save as PDF, open the PDF on white paper" pass is the only way to confirm the resulting file is correct.                                                                                                                                      | One print-to-PDF in dark mode against any print route, ideally before public launch.                                                                         |
+
+Neither blocks the DoD on testable criteria; both are listed so they don't
+get lost.
+
+## 7. Outstanding items
+
+Phase A — **only two items remain, both owner-blocked**:
+
+| Item   | Status                     | Notes                                                                                                                                                                                                                  |
+| ------ | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A1** | Pending — paused per owner | Replace placeholder content with the owner's real history. No builder action. Once unpaused, A1 is small (content-file swap) and unblocks A8.                                                                          |
+| **A8** | Approved — blocked on A1   | Education coursework (FEAT-011). New `Coursework` entity, new `/education/[id]` route, `skillUsage` indexing extension. Field set tuned to A1's real data. ADR required only if Coursework joins the unified timeline. |
+
+Phase B (parking lot) is unchanged from the 2026-05-29 restructure — 16
+entries (`B1`..`B16`) covering post-v1 polish, strategic alternatives,
+and CI / visual-regression follow-ups. See
+[roadmap.md → Phase B](../roadmap.md).
+
+**Builder-side state**: feature-complete for v1. The site is shippable
+today against placeholder content if the owner needed to link it.
+
+## 8. Recommended next steps
+
+In order of impact:
+
+1. **Owner action** — unpause A1 and provide real-history content for the
+   six entity files. The loader will surface any schema/reference issues
+   with file + field error messages, so iteration is fast.
+2. **Builder action when A1 lands** — A8 (FEAT-011 coursework) is the
+   natural follow-up. Plan to revisit FEAT-011's field set against A1's
+   real coursework data before locking it down (per FEAT-011 notes).
+3. **Pre-launch checks** — the two manual carries in §6 (dark-mode
+   contrast pass + dark-mode print-to-PDF), plus a fresh Lighthouse
+   re-run on the post-A1 site.
+4. **Optional infra** — once shippable, B14 (GitHub Actions CI) and B15
+   (Lighthouse CI) become high-value adds. Both are parked but neither
+   requires owner-side input.
+
+## 9. Commands used in this pass
+
+```sh
+pnpm lint                        # eslint .
+pnpm typecheck                   # tsc --noEmit
+pnpm format:check                # prettier --check .
+pnpm test                        # vitest run — 152 / 152
+pnpm test:e2e                    # playwright test — 48 / 48
+pnpm build                       # next build — static export, 43 routes
+```
+
+Lighthouse not re-run this pass — see §4 for justification.

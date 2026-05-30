@@ -16,17 +16,19 @@ export default function NotFound() {
     <>
       <SiteHeader site={site} />
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <p className="text-xs uppercase tracking-wider text-neutral-500">404</p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-900">
+        <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+          404
+        </p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
           That page doesn’t exist.
         </h1>
-        <p className="mt-4 text-sm text-neutral-700">
+        <p className="mt-4 text-sm text-neutral-700 dark:text-neutral-300">
           Sorry — there’s nothing at this URL on {site.ownerName}’s resume site.
         </p>
         <p className="mt-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-1 text-sm font-medium text-neutral-900 underline-offset-2 hover:underline"
+            className="inline-flex items-center gap-1 text-sm font-medium text-neutral-900 underline-offset-2 hover:underline dark:text-neutral-100"
           >
             <span aria-hidden="true">←</span> Back to home
           </Link>

@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-const ACTIVE_CLASSES = "bg-neutral-900 text-white";
-const INACTIVE_CLASSES = "bg-white text-neutral-700 hover:bg-neutral-100";
+const ACTIVE_CLASSES = "bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900";
+const INACTIVE_CLASSES =
+  "bg-white text-neutral-700 hover:bg-neutral-100 dark:bg-neutral-950 dark:text-neutral-300 dark:hover:bg-neutral-900";
 
 const ITEMS = [
   { id: "skills", label: "Skills", href: "/skills" },
@@ -23,7 +24,7 @@ export function PrimaryNav({ activeNav }: { activeNav?: PrimaryNavId }) {
             key={item.id}
             href={item.href}
             aria-current={isActive ? "page" : undefined}
-            className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ring-neutral-200 ${
+            className={`rounded-full px-3 py-1 text-xs font-medium ring-1 ring-inset ring-neutral-200 dark:ring-neutral-800 ${
               isActive ? ACTIVE_CLASSES : INACTIVE_CLASSES
             }`}
           >

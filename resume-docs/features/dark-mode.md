@@ -3,9 +3,9 @@
 | Field            | Value                                                |
 | ---------------- | ---------------------------------------------------- |
 | Feature ID       | FEAT-010                                             |
-| Status           | Approved                                             |
+| Status           | Shipped                                              |
 | Owner            | Site owner                                           |
-| Last updated     | 2026-05-29                                           |
+| Last updated     | 2026-05-29 (post-ship: §11 palette resolved)         |
 | Related PRD goal | Match visitor system preferences; modern visual feel |
 | Related ADRs     | —                                                    |
 
@@ -127,5 +127,46 @@ telemetry.
 - **Specific dark-mode accent palette.** Off-white-on-near-black is the
   baseline; whether to use `neutral-950` (very dark) or `neutral-900`
   (slightly softer) for the background, and whether links pick up a
-  brighter accent — owner aesthetic call. — assumed `neutral-950` base,
-  `neutral-100` body text, neutral-200 borders. Adjustable.
+  brighter accent — owner aesthetic call. ~~Assumed `neutral-950` base,
+  `neutral-100` body text, neutral-200 borders. Adjustable.~~ —
+  **Resolved (2026-05-29, post-ship)**: shipped palette uses
+  `neutral-950` base, `neutral-100` body text, `neutral-800` borders /
+  rings (deviating from the original "neutral-200 borders" assumption,
+  which produced too-bright lines on a dark background). Card and
+  hover surfaces use `neutral-900` over the `neutral-950` base for
+  hierarchy. The four track tints (sky / amber / emerald / violet) use
+  their `-950` shades for background and `-200` shades for text, kept
+  in a single `TRACK_STYLES.chipDark` field on `TrackBadge`. Active
+  nav pills invert to `neutral-100` background with `neutral-900` text.
+  Mapping table embedded as code comments on `TrackBadge`; the
+  remainder is the standard Tailwind dark-mode inversion. Adjustable
+  in future via a single sweep — no API or content change required.
+
+## 12. Shipped palette quick-reference
+
+For future contributors so the sweep stays consistent:
+
+| Light                                          | Dark                                                                                   |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `bg-white`                                     | `dark:bg-neutral-950`                                                                  |
+| `bg-white/90` (sticky header)                  | `dark:bg-neutral-950/90`                                                               |
+| `bg-neutral-50` (empty-state, hover card)      | `dark:bg-neutral-900`                                                                  |
+| `bg-neutral-100` (skill tag, inactive pill bg) | `dark:bg-neutral-800` (skill tag) / `dark:bg-neutral-900` (inactive pill on dark base) |
+| `bg-neutral-900` (active pill, mailto button)  | `dark:bg-neutral-100`                                                                  |
+| `text-neutral-900`                             | `dark:text-neutral-100`                                                                |
+| `text-neutral-800`                             | `dark:text-neutral-200`                                                                |
+| `text-neutral-700`                             | `dark:text-neutral-300`                                                                |
+| `text-neutral-600`                             | `dark:text-neutral-400`                                                                |
+| `text-neutral-500`                             | `dark:text-neutral-400` (eyebrow labels gain a half-step lift for AA contrast)         |
+| `text-white` (on inverted bg)                  | `dark:text-neutral-900`                                                                |
+| `border-neutral-200` / `ring-neutral-200`      | `dark:border-neutral-800` / `dark:ring-neutral-800`                                    |
+| `border-neutral-300`                           | `dark:border-neutral-700`                                                              |
+| `divide-neutral-100`                           | `dark:divide-neutral-800`                                                              |
+| `hover:bg-neutral-50`                          | `dark:hover:bg-neutral-900`                                                            |
+| `hover:bg-neutral-100`                         | `dark:hover:bg-neutral-800`                                                            |
+
+**Print components carry no `dark:` variants** and are wrapped in
+`src/app/print/layout.tsx` (which forces `bg-white text-neutral-900`)
+so they look identical in both themes on screen. `print.css` keeps
+its `@media print { html, body { background: white !important; color: black !important; } }`
+defense for the actual print step.

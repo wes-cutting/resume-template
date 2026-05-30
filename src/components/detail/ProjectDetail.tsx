@@ -17,9 +17,15 @@ export function ProjectDetail({ project }: { project: ProjectJoined }) {
           href={`/position/${project.position.id}`}
           label={`Back to ${project.position.title}`}
         />
-        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">{project.name}</h1>
-        {attribution ? <p className="text-sm text-neutral-700">{attribution}</p> : null}
-        <p className="pt-2 text-sm leading-relaxed text-neutral-800">{project.summary}</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          {project.name}
+        </h1>
+        {attribution ? (
+          <p className="text-sm text-neutral-700 dark:text-neutral-300">{attribution}</p>
+        ) : null}
+        <p className="pt-2 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">
+          {project.summary}
+        </p>
       </header>
 
       <Highlights items={project.highlights} />
@@ -28,7 +34,7 @@ export function ProjectDetail({ project }: { project: ProjectJoined }) {
         <section aria-labelledby="links-heading">
           <h3
             id="links-heading"
-            className="text-sm font-medium uppercase tracking-wide text-neutral-500"
+            className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
           >
             Links
           </h3>
@@ -39,7 +45,7 @@ export function ProjectDetail({ project }: { project: ProjectJoined }) {
                   href={link.url}
                   rel="noopener noreferrer"
                   target="_blank"
-                  className="text-neutral-700 underline-offset-2 hover:underline"
+                  className="text-neutral-700 underline-offset-2 hover:underline dark:text-neutral-300"
                 >
                   {link.label}
                 </a>

@@ -9,10 +9,15 @@
     display: none !important;
   }
 
+  /* FEAT-010 — !important defends print-light against any dark: utility that
+   * would otherwise win on specificity in dark mode. Print stays light
+   * regardless of system theme so the resulting PDF remains readable on
+   * paper. background-color (not the shorthand) so dark utilities can't slip
+   * through via the longhand. */
   html,
   body {
-    background: white;
-    color: black;
+    background-color: white !important;
+    color: black !important;
   }
 
   body {

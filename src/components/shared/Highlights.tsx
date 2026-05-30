@@ -10,11 +10,11 @@ export function Highlights({
     <section aria-labelledby="highlights-heading">
       <h3
         id="highlights-heading"
-        className="text-sm font-medium uppercase tracking-wide text-neutral-500"
+        className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
       >
         {label}
       </h3>
-      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-neutral-700">
+      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
         {items.map((item, i) => (
           <li key={i}>{item}</li>
         ))}

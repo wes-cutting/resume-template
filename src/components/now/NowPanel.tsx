@@ -37,14 +37,18 @@ export function NowPanel({ now }: { now: Now }) {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <p className="text-xs uppercase tracking-wider text-neutral-500">What I&rsquo;m up to</p>
-        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Now</h1>
-        <p className="text-sm text-neutral-600">
+        <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+          What I&rsquo;m up to
+        </p>
+        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          Now
+        </h1>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
           Updated <time dateTime={now.lastUpdated}>{updatedLabel}</time>
         </p>
       </header>
 
-      <section className="space-y-4 text-base leading-relaxed text-neutral-800">
+      <section className="space-y-4 text-base leading-relaxed text-neutral-800 dark:text-neutral-200">
         {paragraphs.map((paragraph, i) => (
           <p key={i}>{paragraph}</p>
         ))}
@@ -54,11 +58,11 @@ export function NowPanel({ now }: { now: Now }) {
         <section aria-labelledby="now-currently-heading" className="space-y-2">
           <h2
             id="now-currently-heading"
-            className="text-sm font-medium uppercase tracking-wide text-neutral-500"
+            className="text-sm font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400"
           >
             Currently
           </h2>
-          <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-neutral-800">
+          <ul className="list-disc space-y-1 pl-5 text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">
             {now.bullets.map((bullet, i) => (
               <li key={i}>{bullet}</li>
             ))}
@@ -66,7 +70,7 @@ export function NowPanel({ now }: { now: Now }) {
         </section>
       ) : null}
 
-      <footer className="border-t border-neutral-200 pt-4 text-xs text-neutral-500">
+      <footer className="border-t border-neutral-200 pt-4 text-xs text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">
         <p>
           This page follows the{" "}
           <a

@@ -42,9 +42,9 @@ export default function HomePage() {
       <main className="mx-auto max-w-3xl px-6 py-10">
         <section className="mb-8">
           <h1 className="text-2xl font-semibold tracking-tight">{site.ownerName}</h1>
-          <p className="mt-1 text-neutral-700">{site.tagline}</p>
+          <p className="mt-1 text-neutral-700 dark:text-neutral-300">{site.tagline}</p>
           {site.location ? (
-            <p className="mt-0.5 text-sm text-neutral-500">{site.location}</p>
+            <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">{site.location}</p>
           ) : null}
         </section>
         <div className="mb-4">

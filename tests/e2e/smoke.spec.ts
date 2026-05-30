@@ -266,6 +266,83 @@ test.describe("career switcher placement", () => {
   });
 });
 
+test.describe("dark mode (FEAT-010)", () => {
+  // Tailwind v4 emits OKLCH colors directly, so we read the L channel from
+  // the computed background. Falls back to BT.709 relative luminance for any
+  // rgb()/rgba() values (print.css's explicit `white`).
+  async function bgLightness(page: Page, selector: string): Promise<number> {
+    const value = await page.evaluate((sel) => {
+      const el = sel === "body" ? document.body : document.querySelector(sel);
+      if (!el) return null;
+      // Force a layout flush so any pending media-query reflow has applied.
+      void (el as HTMLElement).offsetHeight;
+      return getComputedStyle(el as Element).backgroundColor;
+    }, selector);
+    if (!value) throw new Error(`no element matched ${selector}`);
+    const oklch = /oklch\(\s*([0-9.]+)/.exec(value);
+    if (oklch && oklch[1]) return Number(oklch[1]);
+    const rgb = /rgba?\(([^)]+)\)/.exec(value);
+    if (rgb && rgb[1]) {
+      const [r = 0, g = 0, b = 0] = rgb[1].split(",").map((s) => Number(s.trim()) / 255);
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+    throw new Error(`unrecognized color format: ${value}`);
+  }
+
+  for (const path of ["/", "/career/software", "/skills", "/now"] as const) {
+    test(`${path} renders with a dark body background under prefers-color-scheme: dark`, async ({
+      browser,
+    }) => {
+      const ctx = await browser.newContext({ colorScheme: "dark" });
+      const page = await ctx.newPage();
+      try {
+        await page.goto(path);
+        // neutral-950 → L ≈ 0.145; pure white → L = 1. Anything < 0.3 is dark.
+        expect(await bgLightness(page, "body")).toBeLessThan(0.3);
+      } finally {
+        await ctx.close();
+      }
+    });
+  }
+
+  test("light mode still renders a white body background (no regression)", async ({ browser }) => {
+    const ctx = await browser.newContext({ colorScheme: "light" });
+    const page = await ctx.newPage();
+    try {
+      await page.goto("/");
+      expect(await bgLightness(page, "body")).toBeGreaterThan(0.9);
+    } finally {
+      await ctx.close();
+    }
+  });
+
+  test("print routes stay light even when the system prefers dark", async ({ browser }) => {
+    const ctx = await browser.newContext({ colorScheme: "dark" });
+    const page = await ctx.newPage();
+    try {
+      await page.goto("/print/software");
+      // The print layout wraps the page in a force-light shell (data-testid set
+      // so this doesn't depend on Next.js's intermediate Suspense wrappers).
+      expect(await bgLightness(page, "[data-testid='print-shell']")).toBeGreaterThan(0.9);
+    } finally {
+      await ctx.close();
+    }
+  });
+
+  test("print media emulation forces light even when colorScheme is dark", async ({ browser }) => {
+    const ctx = await browser.newContext({ colorScheme: "dark" });
+    const page = await ctx.newPage();
+    try {
+      await page.goto("/print/software");
+      await page.emulateMedia({ media: "print", colorScheme: "dark" });
+      // print.css forces body bg to white with !important.
+      expect(await bgLightness(page, "body")).toBeGreaterThan(0.9);
+    } finally {
+      await ctx.close();
+    }
+  });
+});
+
 test.describe("site polish (FEAT-007)", () => {
   test("home page exposes OG and Twitter Card meta tags", async ({ page }) => {
     await page.goto("/");

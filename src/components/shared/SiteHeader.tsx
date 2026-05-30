@@ -8,12 +8,12 @@ export function SiteHeader({ site, activeNav }: { site: Site; activeNav?: Primar
     <>
       <header
         data-print="hide"
-        className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur"
+        className="sticky top-0 z-10 border-b border-neutral-200 bg-white/90 backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/90"
       >
         <div className="mx-auto flex max-w-3xl flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-6 py-3">
           <Link
             href="/"
-            className="text-base font-semibold tracking-tight text-neutral-900 hover:text-neutral-700"
+            className="text-base font-semibold tracking-tight text-neutral-900 hover:text-neutral-700 dark:text-neutral-100 dark:hover:text-neutral-300"
           >
             {site.ownerName}
           </Link>

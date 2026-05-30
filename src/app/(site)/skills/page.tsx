@@ -24,9 +24,11 @@ export default function SkillsPage() {
       <SiteHeader site={site} activeNav="skills" />
       <main className="mx-auto max-w-3xl px-6 py-10">
         <section className="mb-8">
-          <p className="text-xs uppercase tracking-wider text-neutral-500">Capabilities</p>
+          <p className="text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            Capabilities
+          </p>
           <h1 className="text-2xl font-semibold tracking-tight">Skills</h1>
-          <p className="mt-1 text-sm text-neutral-600">
+          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
             Grouped by category. Click a skill to see where it was practiced.
           </p>
         </section>

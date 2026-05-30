@@ -17,15 +17,17 @@ export function EducationEntry({ entry }: { entry: Education }) {
   return (
     <article className="space-y-2">
       <header>
-        <h2 className="text-lg font-semibold tracking-tight text-neutral-900">
+        <h2 className="text-lg font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
           {entry.credential}
         </h2>
-        <p className="text-sm text-neutral-700">
+        <p className="text-sm text-neutral-700 dark:text-neutral-300">
           {entry.institution}
-          {entry.field ? <span className="text-neutral-500"> · {entry.field}</span> : null}
+          {entry.field ? (
+            <span className="text-neutral-500 dark:text-neutral-400"> · {entry.field}</span>
+          ) : null}
         </p>
         {dateRange ? (
-          <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500">
+          <p className="mt-1 text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
             {earliestIso ? <time dateTime={earliestIso}>{dateRange}</time> : dateRange}
           </p>
         ) : null}
